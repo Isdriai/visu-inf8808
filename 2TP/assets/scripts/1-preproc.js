@@ -29,7 +29,7 @@ function parseDate(data) {
     // JS a besoin du format MM/JJ/YYYY et pas du JJ/MM/YYYY présent dans le csv
     var sep = "/"
     var dateSplit = element.Date.split(sep)
-    var dateFormated = dateSplit[1] + sep + dateSplit[0] + sep + dateSplit[2] 
+    var dateFormated = dateSplit[1] + sep + dateSplit[0] + sep + dateSplit[2] // il suffit d'inverser les J et les M
     element.Date = new Date(dateFormated)
   });
 }
