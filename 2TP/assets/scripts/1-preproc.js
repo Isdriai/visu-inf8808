@@ -84,8 +84,9 @@ function createSources(color, data) {
 function domainX(xFocus, xContext, data) {
   // TODO: Préciser les domaines pour les variables "xFocus" et "xContext" pour l'axe X.
   var nbrJours = data.length // 366 car 2016 est bissextile
-  xFocus.domain([0, nbrJours])
-  xContext.domain([0, nbrJours])
+  var scope = [data[0].Date, data[nbrJours-1].Date]
+  xFocus.domain(scope)
+  xContext.domain(scope)
 }
 
 /**
