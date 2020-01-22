@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>INF8808 - Travail pratique 1</title>
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Générateur de cercles SVG</h1>
+  </header>
+  <main>
+    <div class="form-group">
+      <input id="quantity" type="number" placeholder="Quantité" min="1" value="1">
+      <button class="green" id="create-circles-button">Créer</button>
+    </div>
+    <button class="red" id="delete-circles-button">Effacer</button>
+    <p class="pull-right">Nombre de cercles: <strong id="circles-count">0</strong></p>
+
+    <svg></svg>
+  </main>
+</body>
+<script type="text/javascript" src="assets/libs/d3.js"></script>
+<script type="text/javascript" src="assets/libs/d3-tip.js"></script>
+<script type="text/javascript" src="assets/scripts/main.js"></script>
+</html>
