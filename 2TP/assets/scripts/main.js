@@ -80,9 +80,6 @@
     // Échelle permettant d'associer 10 valeurs à 10 couleurs différentes
     var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    console.log(color)
-    console.log(typeof(color))
-
     domainColor(color, data);
     parseDate(data);
 

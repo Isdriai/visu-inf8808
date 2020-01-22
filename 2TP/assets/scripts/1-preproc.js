@@ -13,7 +13,8 @@
  */
 function domainColor(color, data) {
   // TODO: Définir le domaine de la variable "color" en associant un nom de rue à une couleur.
-
+  var places = Object.keys(data[0]).filter(place => place != "Date") // On prend comme noms de lieux toutes les colonnes sauf "Date"
+  color.domain(places)
 }
 
 /**
@@ -24,7 +25,13 @@ function domainColor(color, data) {
  */
 function parseDate(data) {
   // TODO: Convertir les dates du fichier CSV en objet de type Date.
-
+  data.forEach(element => {
+    // JS a besoin du format MM/JJ/YYYY et pas du JJ/MM/YYYY présent dans le csv
+    var sep = "/"
+    var dateSplit = element.Date.split(sep)
+    var dateFormated = dateSplit[1] + sep + dateSplit[0] + sep + dateSplit[2] 
+    element.Date = new Date(dateFormated)
+  });
 }
 
 /**
@@ -49,8 +56,22 @@ function parseDate(data) {
  *                  ]
  */
 function createSources(color, data) {
-  // TODO: Retourner l'objet ayant le format demandé.
+  var sortedData = []
 
+  var domain = color.domain()
+  domain.forEach(place => {
+    sortedData.push({name: place, values: []})
+  })
+
+  data.forEach(jour => {
+    for(var place in jour) {
+      if(place !== "Date") {
+        var placeValues = sortedData.find(objPlace => objPlace.name == place)
+        placeValues.values.push({date: jour["Date"], count: parseInt(jour[place], 10)})
+      }
+    }
+  })
+  return sortedData  
 }
 
 /**
@@ -62,7 +83,9 @@ function createSources(color, data) {
  */
 function domainX(xFocus, xContext, data) {
   // TODO: Préciser les domaines pour les variables "xFocus" et "xContext" pour l'axe X.
-
+  var nbrJours = data.length // 366 car 2016 est bissextile
+  xFocus.domain([0, nbrJours])
+  xContext.domain([0, nbrJours])
 }
 
 /**
@@ -74,5 +97,13 @@ function domainX(xFocus, xContext, data) {
  */
 function domainY(yFocus, yContext, sources) {
   // TODO: Préciser les domaines pour les variables "yFocus" et "yContext" pour l'axe Y.
-
+  var max = 0
+  for(var p in sources) {
+    var maxPlace = Math.max.apply(Math, sources[p].values.map(function(value) { return value.count; }))
+    if (maxPlace > max) {
+      max = maxPlace
+    }
+  }
+  yFocus.domain([0, max])
+  yContext.domain([0, max])
 }
