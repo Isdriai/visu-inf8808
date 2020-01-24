@@ -23,6 +23,7 @@ function createLine(x, y) {
            .curve(d3.curveBasisOpen)
 }
 
+
 /**
  * Crée le graphique focus.
  *
@@ -60,7 +61,7 @@ function createContextLineChart(g, sources, line, color) {
     .datum(sources[p].values)
     .attr("class", "line")
     .attr("d", line)
-    .attr("line-width", 10)
-    .attr("fill", color(sources[p].name))
+    .style("stroke", sources[p].name ===  "Moyenne" ? "#000000": color(sources[p].name))
+    .style("stroke-width", sources[p].name ===  "Moyenne" ? 3 : 1)
   }
 }
