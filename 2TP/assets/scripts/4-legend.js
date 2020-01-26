@@ -63,13 +63,16 @@ function displayLine(element, color) {
   var cell = element.childNodes[0]
   var text = element.childNodes[1].childNodes[0].data
   var whiteRGBString = "rgb(255, 255, 255)"
-  var lineStyle = d3.select("#" + text).node().style
+  var lineStyleFocus = d3.select("#" + text).node().style
+  var lineStyleContext = d3.select("#" + text + "Context").node().style
   if (cell.style.fill == whiteRGBString) {
     cell.style.fill = (text === "Moyenne" ? "#000000" : color(text))
-    lineStyle.opacity = 1
+    lineStyleFocus.opacity = 1
+    lineStyleContext.opacity = 1
   } else {
     cell.style.fill = whiteRGBString
-    lineStyle.opacity = 0
+    lineStyleFocus.opacity = 0
+    lineStyleContext.opacity = 0
   }
   
 }

@@ -60,6 +60,7 @@ function createContextLineChart(g, sources, line, color) {
   for(var p in sources) {
     g.append("path")
     .datum(sources[p].values)
+    .attr("id", sources[p].name + "Context")
     .attr("class", "line")
     .attr("d", line)
     .style("stroke", sources[p].name ===  "Moyenne" ? "#000000": color(sources[p].name))
