@@ -13,8 +13,39 @@
  * @param color     Échelle de 10 couleurs.
  */
 function legend(svg, sources, color) {
-  // TODO: Créer la légende accompagnant le graphique.
+  var node = svg.node()
+  var width = node.getAttribute("width")
+  var height = node.getAttribute("height")
 
+  var shitfY = 50
+
+  console.log(sources)
+
+  var legend = svg.append("g")
+    .selectAll("g")
+    .data(sources)
+    .enter()
+    .append('g')
+      .attr('class', 'legend')
+      .attr('transform', function(d, i) {
+        var heightCase = height / (sources.length * 2)
+        var x = width / 15;
+        var y = 50 + i * heightCase;
+        return 'translate(' + x + ',' + y + ')'
+    })
+
+    legend.append('rect')
+    .attr('width', width / 125)
+    .attr('height', height / 50)
+    .style('fill', function(d) {
+      return d.name === "Moyenne" ? "#000000" : color(d.name)
+    })
+    .style('stroke', color)
+
+    legend.append('text')
+    .attr('x', 20)
+    .attr('y', 10)
+    .text(function(d) { return d.name })
 
 }
 
@@ -29,5 +60,5 @@ function legend(svg, sources, color) {
  */
 function displayLine(element, color) {
   // TODO: Compléter le code pour faire afficher ou disparaître une ligne en fonction de l'élément cliqué.
-
+  console.log("coucou")
 }
