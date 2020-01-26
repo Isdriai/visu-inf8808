@@ -38,6 +38,7 @@ function createFocusLineChart(g, sources, line, color) {
   for(var p in sources) {
     g.append("path")
     .datum(sources[p].values)
+    .attr("id", sources[p].name)
     .attr("clip-path", "url(#clip)")
     .attr("class", "line")
     .attr("d", line)

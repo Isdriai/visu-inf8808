@@ -19,8 +19,6 @@ function legend(svg, sources, color) {
 
   var shitfY = 50
 
-  console.log(sources)
-
   var legend = svg.append("g")
     .selectAll("g")
     .data(sources)
@@ -32,7 +30,10 @@ function legend(svg, sources, color) {
         var x = width / 15;
         var y = 50 + i * heightCase;
         return 'translate(' + x + ',' + y + ')'
-    })
+      })
+      .on("click", function(d) {
+        displayLine(this, color)
+      })
 
     legend.append('rect')
     .attr('width', width / 125)
@@ -46,7 +47,6 @@ function legend(svg, sources, color) {
     .attr('x', 20)
     .attr('y', 10)
     .text(function(d) { return d.name })
-
 }
 
 /**
@@ -60,5 +60,16 @@ function legend(svg, sources, color) {
  */
 function displayLine(element, color) {
   // TODO: Compléter le code pour faire afficher ou disparaître une ligne en fonction de l'élément cliqué.
-  console.log("coucou")
+  var cell = element.childNodes[0]
+  var text = element.childNodes[1].childNodes[0].data
+  var whiteRGBString = "rgb(255, 255, 255)"
+  var lineStyle = d3.select("#" + text).node().style
+  if (cell.style.fill == whiteRGBString) {
+    cell.style.fill = (text === "Moyenne" ? "#000000" : color(text))
+    lineStyle.opacity = 1
+  } else {
+    cell.style.fill = whiteRGBString
+    lineStyle.opacity = 0
+  }
+  
 }
