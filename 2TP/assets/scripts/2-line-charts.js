@@ -18,11 +18,30 @@
 function createLine(x, y) {
   // TODO: Retourner une ligne SVG (voir "d3.line"). Pour l'option curve, utiliser un curveBasisOpen.
   return d3.line()
-           .x(function(d) { return x(d.date);})
-           .y(function(d) { return y(d.count);})
+           .x(function(d) { return x(d.date)})
+           .y(function(d) { return y(d.count)})
            .curve(d3.curveBasisOpen)
 }
 
+/**
+ * Crée une ligne qui sera ajouté à un graphique
+ * 
+ * @param g         Le groupe SVG dans lequel le graphique doit être dessiné.
+ * @param id        L'identifiant donné à la LineChart.
+ * @param datum     Données liées à cette LineChart.
+ * @param line      La fonction permettant de dessiner les lignes du graphique.
+ * @param color     L'échelle de couleurs ayant une couleur associée à un nom de rue.
+ * @param name      Nom à donner à la LineChart.
+ */
+function createLineChart(g, id, datum, line, color, name) {
+  return g.append("path")
+    .datum(datum)
+    .attr("id", id)
+    .attr("class", "line")
+    .attr("d", line)
+    .style("stroke", name ===  "Moyenne" ? "#000000": color(name))
+    .style("stroke-width", name ===  "Moyenne" ? 3 : 1)
+}
 
 /**
  * Crée le graphique focus.
@@ -36,14 +55,8 @@ function createFocusLineChart(g, sources, line, color) {
   // TODO: Dessiner le graphique focus dans le groupe "g".
   // Pour chacun des "path" que vous allez dessiner, spécifier l'attribut suivant: .attr("clip-path", "url(#clip)").
   for(var p in sources) {
-    g.append("path")
-    .datum(sources[p].values)
-    .attr("id", sources[p].name)
-    .attr("clip-path", "url(#clip)")
-    .attr("class", "line")
-    .attr("d", line)
-    .style("stroke", sources[p].name ===  "Moyenne" ? "#000000": color(sources[p].name))
-    .style("stroke-width", sources[p].name ===  "Moyenne" ? 3 : 1)
+    var place = sources[p]
+    createLineChart(g, place.name, place.values, line, color, place.name).attr("clip-path", "url(#clip)")
   }
 }
 
@@ -58,12 +71,7 @@ function createFocusLineChart(g, sources, line, color) {
  */
 function createContextLineChart(g, sources, line, color) {
   for(var p in sources) {
-    g.append("path")
-    .datum(sources[p].values)
-    .attr("id", sources[p].name + "Context")
-    .attr("class", "line")
-    .attr("d", line)
-    .style("stroke", sources[p].name ===  "Moyenne" ? "#000000": color(sources[p].name))
-    .style("stroke-width", sources[p].name ===  "Moyenne" ? 3 : 1)
+    var place = sources[p]
+    createLineChart(g, place.name + "Context", place.values, line, color, place.name)
   }
 }

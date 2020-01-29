@@ -17,8 +17,6 @@ function legend(svg, sources, color) {
   var width = node.getAttribute("width")
   var height = node.getAttribute("height")
 
-  var shitfY = 50
-
   var legend = svg.append("g")
     .selectAll("g")
     .data(sources)
@@ -74,5 +72,4 @@ function displayLine(element, color) {
     lineStyleFocus.opacity = 0
     lineStyleContext.opacity = 0
   }
-  
 }
