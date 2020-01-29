@@ -20,5 +20,25 @@
  * @see https://bl.ocks.org/mbostock/34f08d5e11952a80609169b7917d4172    ==> (en d3 v5) <==
  */
 function brushUpdate(brush, g, line, xFocus, xContext, xAxis) {
-  
+  console.log("deb")
+  console.log(brush)
+  console.log(g)
+  console.log(line)
+  console.log(xFocus)
+  console.log(xContext)
+  console.log(xAxis)
+  console.log("fin")
+  console.log("next")
+  var s = d3.event.selection || xContext.range()
+  console.log(s)
+  var inr = xContext.invert
+  console.log(inr)
+  var domaine = xFocus.domain(s.map(inr, xContext))
+  console.log(domaine)
+  var places = g.select(".line")
+  console.log(places)
+  places.attr("d", line)
+  var axe = g.select(".axis--x").call(xAxis)
+  console.log(axe)
+  console.log("over")
 }

@@ -100,7 +100,7 @@ function domainY(yFocus, yContext, sources) {
   // TODO: Préciser les domaines pour les variables "yFocus" et "yContext" pour l'axe Y.
   var max = 0
   for(var p in sources) {
-    var maxPlace = Math.max.apply(Math, sources[p].values.map(function(value) { return value.count; }))
+    var maxPlace = Math.max.apply(Math, sources[p].values.map(function(value) { return value.count }))
     if (maxPlace > max) {
       max = maxPlace
     }
