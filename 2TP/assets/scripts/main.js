@@ -93,6 +93,7 @@
     // Axes focus
     focus.append("g")
       .attr("class", "x axis")
+      .attr("id", "xAxisFocus")
       .attr("transform", "translate(0," + heightFocus + ")")
       .call(xAxisFocus);
 

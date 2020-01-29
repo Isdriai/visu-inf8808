@@ -25,4 +25,6 @@ function brushUpdate(brush, g, line, xFocus, xContext, xAxis) {
   xFocus.domain(s.map(inr, xContext))
   var places = g.selectAll(".line")
   places.attr("d", line)
+  var axe = d3.select("#xAxisFocus") 
+  axe.call(xAxis)
 }
