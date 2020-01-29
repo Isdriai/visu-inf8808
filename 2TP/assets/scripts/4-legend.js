@@ -30,7 +30,7 @@ function legend(svg, sources, color) {
         return 'translate(' + x + ',' + y + ')'
       })
       .on("click", function(d) {
-        displayLine(this, color)
+        displayLine(this, color) // function qui gere le click pour afficher ou désactiver la légende d'une case
       })
 
     legend.append('rect')
@@ -61,8 +61,8 @@ function displayLine(element, color) {
   var cell = element.childNodes[0]
   var text = element.childNodes[1].childNodes[0].data
   var whiteRGBString = "rgb(255, 255, 255)"
-  var lineStyleFocus = d3.select("#" + text).node().style
-  var lineStyleContext = d3.select("#" + text + "Context").node().style
+  var lineStyleFocus = d3.select("#" + text).node().style  // style de la ligne dans le graphique focus
+  var lineStyleContext = d3.select("#" + text + "Context").node().style  // style de la ligne dans le graphique context
   if (cell.style.fill == whiteRGBString) {
     cell.style.fill = (text === "Moyenne" ? "#000000" : color(text))
     lineStyleFocus.opacity = 1
