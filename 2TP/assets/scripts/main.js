@@ -71,7 +71,7 @@
   var brush = d3.brushX()
     .extent([[0, 0], [widthContext, heightContext]])
     .on("brush", function () {
-      brushUpdate(brush, focus, lineFocus, xFocus, xContext, xAxisFocus);
+      brushUpdate(brush, focus, lineFocus, xFocus, xContext, xAxisFocus, yAxisFocus);
     });
 
   /***** Chargement des données *****/
@@ -93,7 +93,6 @@
     // Axes focus
     focus.append("g")
       .attr("class", "x axis")
-      .attr("id", "xAxisFocus")
       .attr("transform", "translate(0," + heightFocus + ")")
       .call(xAxisFocus);
 
