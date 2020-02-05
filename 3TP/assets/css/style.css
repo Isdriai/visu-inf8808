@@ -1,0 +1,148 @@
+/***** General style *****/
+body {
+  display: table;
+  margin: 20px auto auto;
+  font-family: Arial, sans-serif;
+}
+
+.error {
+  color: #914141;
+}
+
+.row {
+  display: flex;
+}
+
+.row > .col {
+  flex: 1;
+}
+
+/***** Toggle buttons *****/
+.toggle-buttons {
+  display: flex;
+}
+
+.toggle-buttons > button {
+  flex: 1;
+  line-height: 30px;
+  color: #444;
+  background-color: #fafafa;
+  font-size: 11pt;
+  border: 1px solid #999;
+  border-right: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.toggle-buttons > button:last-child {
+  border-right: 1px solid #999;
+}
+
+.toggle-buttons > button.active {
+  color: #fff;
+  background-color: #4c7d95;
+}
+
+/***** Search bar *****/
+#search-bar {
+  display: flex;
+}
+
+#search-bar > input {
+  line-height: 35px;
+  padding: 0 10px;
+  border: 1px solid #999;
+  flex: 1;
+  font-size: 11pt;
+}
+
+#search-bar > input:focus {
+  outline: 0;
+  -webkit-box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+#search-bar > button {
+  background-color: #4c7d95;
+  border: 1px solid #999;
+  border-left: 0;
+  outline: 0;
+  flex-basis: 40px;
+  cursor: pointer;
+}
+
+#search-bar > button:hover {
+  background-color: #2b4d5b;
+}
+
+#search-bar > button img {
+  height: 18px;
+}
+
+/***** SVG *****/
+svg {
+  background-color: white;
+}
+
+.axis {
+  shape-rendering: crispEdges
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+circle {
+  fill-opacity: 0.7;
+}
+
+circle:hover {
+  fill-opacity: 0.9;
+}
+
+circle.selected {
+  fill: #000;
+  fill-opacity: 1;
+}
+
+circle.hide {
+  fill-opacity: 0.15;
+  pointer-events: none;
+}
+
+/***** Tooltip *****/
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  border-radius: 2px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.d3-tip:after {
+  display: inline;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin: -1px 0 0 0;
+  box-sizing: border-box;
+  font-size: 10px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.axis .tick text {
+  font-size: 10pt;
+}
