@@ -15,5 +15,5 @@
 function getToolTipText(d, formatNumber) {
   // TODO: Retourner le texte à afficher dans l'infobulle selon le format demandé.
   //       Assurez-vous d'utiliser la fonction "formatNumber" pour formater les nombres correctement.
-
+  return "coucou"
 }

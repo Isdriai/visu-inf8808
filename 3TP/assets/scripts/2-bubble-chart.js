@@ -17,7 +17,29 @@
 function createAxes(g, xAxis, yAxis, height, width) {
   // TODO: Dessiner les axes X et Y du graphique.
   // Axe horizontal
+  g.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
 
+  // Axe vertical
+    g.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+}
+
+/**
+ * Renseigne la position et le rayon de chaque cercle.
+ * 
+ * @param circles Les cercles.
+ * @param x       L'échelle pour l'axe X.
+ * @param y       L'échelle pour l'axe Y.
+ * @param r       L'échelle pour le rayon des cercles.
+ */
+function placeCircles(circles, x, y, r) {
+  return circles.attr("cx", d => x(d.lifeExpectancy))
+   .attr("cy", d => y(d.income))
+   .attr("r", d => r(d.population))
 }
 
 /**
@@ -34,5 +56,12 @@ function createAxes(g, xAxis, yAxis, height, width) {
 function createBubbleChart(g, data, x, y, r, color, tip) {
   // TODO: Dessiner les cercles du graphique en utilisant les échelles spécifiées.
   //       Assurez-vous d'afficher l'infobulle spécifiée lorsqu'un cercle est survolé.
-
+  placeCircles(g.selectAll("dot")
+   .data(data)
+   .enter()
+   .append("circle")
+   .attr("id", d => d.name)
+   .attr("class", "circle"), x, y, r)
+   .attr("fill", d => color(d.zone))
+   .on("mousemove", d => tip)
 }

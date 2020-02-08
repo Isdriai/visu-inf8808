@@ -21,4 +21,8 @@ function transition(g, data, x, y, r) {
        - La transition doit se faire en 1 seconde.
    */
 
+  placeCircles(g.selectAll(".circle")
+    .data(data)
+    .transition()
+    .duration(1000), x, y, r)
 }
