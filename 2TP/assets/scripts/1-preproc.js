@@ -25,12 +25,10 @@ function domainColor(color, data) {
  */
 function parseDate(data) {
   // TODO: Convertir les dates du fichier CSV en objet de type Date.
+  var formatDate = d3.timeParse("%d/%m/%y")
   data.forEach(element => {
     // JS a besoin du format MM/JJ/YYYY et pas du JJ/MM/YYYY présent dans le csv
-    var sep = "/"
-    var dateSplit = element.Date.split(sep)
-    var dateFormated = dateSplit[1] + sep + dateSplit[0] + sep + dateSplit[2] // il suffit d'inverser les J et les M
-    element.Date = new Date(dateFormated)
+    element.Date = formatDate(element.Date)
   });
 }
 
@@ -98,13 +96,9 @@ function domainX(xFocus, xContext, data) {
  */
 function domainY(yFocus, yContext, sources) {
   // TODO: Préciser les domaines pour les variables "yFocus" et "yContext" pour l'axe Y.
-  var max = 0
-  for(var p in sources) {
-    var maxPlace = Math.max.apply(Math, sources[p].values.map(function(value) { return value.count }))
-    if (maxPlace > max) {
-      max = maxPlace
-    }
-  }
+
+  var max = d3.max(sources.map(source => d3.max(source.values.map(val => val.count))))
+
   yFocus.domain([0, max])
   yContext.domain([0, max])
 }
