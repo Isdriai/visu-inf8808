@@ -16,7 +16,8 @@ function search(countrySelected, g) {
        - Mettre en évidence le pays sélectionné en coloriant le cercle en noir et en appliquant une opacité de 100%.
        - Appliquez une opacité de 15% aux cercles associés aux autres pays.
    */
-  g.selectAll(".circle").attr("class", d => d.name === countrySelected ? "selected" : "hide") // voir style.css
+  g.selectAll("circle")
+   .attr("class", d => d.name === countrySelected ? "selected" : "hide") // voir style.css
 }
 
 /**
@@ -25,6 +26,6 @@ function search(countrySelected, g) {
  * @param g   Le groupe SVG dans lequel le graphique à bulles est dessiné.
  */
 function reset(g) {
-  console.log("on efface wesh !")
-  g.selectAll("circle").attr("class", "")
+  g.selectAll(".hide").attr("class", null)
+  g.select(".selected").attr("class", null)
 }

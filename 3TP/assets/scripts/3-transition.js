@@ -20,8 +20,7 @@ function transition(g, data, x, y, r) {
        - Mettre à jour la taille du rayon des cercles.
        - La transition doit se faire en 1 seconde.
    */
-
-  placeCircles(g.selectAll(".circle")
+  placeCircles(g.selectAll("circle") // voir 2-bubble-chart.js pour placeCircles
     .data(data)
     .transition()
     .duration(1000), x, y, r)

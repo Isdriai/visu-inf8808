@@ -25,7 +25,6 @@ function createAxes(g, xAxis, yAxis, height, width) {
   // Axe vertical
     g.append("g")
     .attr("class", "y axis")
-    .attr("id", "yaxis")
     .call(yAxis)
 
   // label axe x
