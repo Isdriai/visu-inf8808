@@ -26,6 +26,5 @@ function search(countrySelected, g) {
  * @param g   Le groupe SVG dans lequel le graphique à bulles est dessiné.
  */
 function reset(g) {
-  g.selectAll(".hide").attr("class", null)
-  g.select(".selected").attr("class", null)
+  g.selectAll("circle").attr("class", null)
 }
