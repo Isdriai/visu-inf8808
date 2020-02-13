@@ -1,0 +1,157 @@
+/***** General style *****/
+body {
+  display: table;
+  margin: 20px auto auto;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  font-size: 1.2em;
+  margin: 15px 0 20px 0;
+}
+
+.row {
+  display: flex;
+}
+
+.row > .col {
+  flex: 1;
+}
+
+.label {
+  text-align: left;
+  line-height: 24px;
+  flex-basis: 150px;
+}
+
+select {
+  width: 100%;
+}
+
+.label,
+select {
+  padding: 5px;
+  font-size: 1.1em;
+}
+
+/***** Tabs *****/
+.tabs {
+  width: 1000px;
+  border: 1px solid #666;
+}
+
+.tabs > .header {
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+  line-height: 30px;
+  border-bottom: 1px solid #666;
+}
+
+.tabs > .header > li {
+  background-color: #e6e7e8;
+  cursor: pointer;
+}
+
+.tabs > .header > li:not(:last-child) {
+  border-right: 1px solid #666;
+}
+
+.tabs > .header > li.active {
+  color: #fff;
+  background-color: #4c7d95;
+}
+
+.tabs > .content > .tab {
+  display: none;
+  width: 100%;
+  padding: 20px 10px 10px 10px;
+  box-sizing: border-box;
+}
+
+.tabs > .content {
+  text-align: center;
+}
+
+.tabs > .content > .tab.visible {
+  display: block;
+}
+
+/***** SVG *****/
+svg {
+  background-color: white;
+}
+
+rect {
+  fill-opacity: 0.8;
+}
+
+rect:hover {
+  fill-opacity: 1;
+}
+
+.axis {
+  shape-rendering: crispEdges
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.group text {
+  fill: #fff;
+}
+
+#circle circle {
+  fill: none;
+  pointer-events: all;
+}
+
+.chord {
+  fill-opacity: 0.8;
+}
+
+.chord:hover:not(.fade) {
+  fill-opacity: 0.95;
+}
+
+#circle:hover .fade {
+  fill-opacity: 0.1;
+  transition: fill-opacity ease-out 0.1s;
+  pointer-events: none;
+}
+
+/***** Tooltip *****/
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  border-radius: 2px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.d3-tip:after {
+  display: inline;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin: -1px 0 0 0;
+  box-sizing: border-box;
+  font-size: 10px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}

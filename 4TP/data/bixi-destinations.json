@@ -1,0 +1,452 @@
+[
+  {
+    "name": "De la Commune / Place Jacques-Cartier",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 623
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 147
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 38
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 17
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 69
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 18
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 4
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 3
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 14
+      }
+    ]
+  },
+  {
+    "name": "De la Commune / Saint-Sulpice",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 269
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 437
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 27
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 17
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 16
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 3
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 4
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 4
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 4
+      }
+    ]
+  },
+  {
+    "name": "De Maisonneuve / De Bleury",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 38
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 32
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 117
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 147
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 187
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 23
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 16
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 10
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 40
+      }
+    ]
+  },
+  {
+    "name": "De Maisonneuve / Mackay",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 32
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 20
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 143
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 118
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 168
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 16
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 27
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 25
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 4
+      }
+    ]
+  },
+  {
+    "name": "De Maisonneuve / Stanley",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 55
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 56
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 106
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 206
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 116
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 23
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 12
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 6
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 20
+      }
+    ]
+  },
+  {
+    "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 45
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 22
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 23
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 15
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 31
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 175
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 125
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 71
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 83
+      }
+    ]
+  },
+  {
+    "name": "Mont-Royal / Clark",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 18
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 26
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 78
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 23
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 54
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 164
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 71
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 22
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 25
+      }
+    ]
+  },
+  {
+    "name": "Parc du Mont-Royal",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 15
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 24
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 63
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 44
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 60
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 63
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 79
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 22
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 37
+      }
+    ]
+  },
+  {
+    "name": "Pontiac / Gilford",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 15
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 10
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 20
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 23
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 19
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 58
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 17
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 91
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 11
+      }
+    ]
+  },
+  {
+    "name": "Square Saint-Louis",
+    "destinations": [
+      {
+        "name": "De la Commune / Place Jacques-Cartier",
+        "count": 36
+      },
+      {
+        "name": "De la Commune / Saint-Sulpice",
+        "count": 20
+      },
+      {
+        "name": "De Maisonneuve / De Bleury",
+        "count": 66
+      },
+      {
+        "name": "De Maisonneuve / Mackay",
+        "count": 31
+      },
+      {
+        "name": "De Maisonneuve / Stanley",
+        "count": 43
+      },
+      {
+        "name": "Métro Mont-Royal (Rivard/Mont-Royal)",
+        "count": 122
+      },
+      {
+        "name": "Mont-Royal / Clark",
+        "count": 21
+      },
+      {
+        "name": "Parc du Mont-Royal",
+        "count": 0
+      },
+      {
+        "name": "Pontiac / Gilford",
+        "count": 27
+      },
+      {
+        "name": "Square Saint-Louis",
+        "count": 141
+      }
+    ]
+  }
+]

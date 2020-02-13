@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>INF8808 - Travail pratique 4</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <h1>Nombre de trajets réalisés au mois d'août 2015 entre des stations de BIXI</h1>
+  <div class="tabs">
+    <ul class="header row">
+      <li class="col active">Vue détaillée</li>
+      <li class="col">Vue générale</li>
+    </ul>
+    <div class="content">
+      <section class="tab visible" aria-label="Vue détaillée">
+        <div class="row">
+          <div class="label">Station de départ:</div>
+          <select class="col" name="stations" title="Stations de départ"></select>
+        </div>
+        <svg id="bar-chart-svg"></svg>
+      </section>
+      <section class="tab" aria-label="Vue générale">
+        <svg id="chord-diagram-svg"></svg>
+      </section>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="assets/libs/d3.js"></script>
+  <script type="text/javascript" src="assets/libs/d3-tip.js"></script>
+  <script type="text/javascript" src="assets/libs/localization-fr.js"></script>
+
+  <script type="text/javascript" src="assets/scripts/1-preproc.js"></script>
+  <script type="text/javascript" src="assets/scripts/2-bar-chart.js"></script>
+  <script type="text/javascript" src="assets/scripts/3-chord-diagram.js"></script>
+  <script type="text/javascript" src="assets/scripts/main.js"></script>
+</body>
+</html>
