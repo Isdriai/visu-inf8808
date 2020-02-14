@@ -16,7 +16,20 @@
 function createAxes(g, xAxis, yAxis, height) {
   // TODO: Dessiner les axes X et Y du graphique. Assurez-vous d'indiquer un titre pour l'axe Y.
   // Axe horizontal
+  g.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", 150)
+      .attr("dy", 100)
+      .attr("transform", d => "rotate(20)" )
 
+  // Axe vertical
+  g.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
 }
 
 /**
@@ -33,7 +46,19 @@ function createAxes(g, xAxis, yAxis, height) {
 function createBarChart(g, currentData, x, y, color, tip, height) {
   // TODO: Dessiner les cercles à bandes en utilisant les échelles spécifiées.
   //       Assurez-vous d'afficher l'infobulle spécifiée lorsqu'une barre est survolée.
-
+  console.log("coucou")
+  g.selectAll(".bar")
+   .data(currentData)
+   .enter()
+   .append("rect")
+   .attr("class", "bar")
+   .attr("x", function(d) { var res = x(d.name); console.log(res); return res })
+   .attr("y", d => y(d.count))
+   .style("fill", d => color(d.name))
+   .attr("height", d => height - y(d.count))
+   .attr("width", 10)
+   //.on("mouseover", tip.show)
+   //.on("mouseout", tip.hide)
 }
 
 /**
