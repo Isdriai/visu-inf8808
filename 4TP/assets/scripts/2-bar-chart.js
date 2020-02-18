@@ -46,19 +46,18 @@ function createAxes(g, xAxis, yAxis, height) {
 function createBarChart(g, currentData, x, y, color, tip, height) {
   // TODO: Dessiner les cercles à bandes en utilisant les échelles spécifiées.
   //       Assurez-vous d'afficher l'infobulle spécifiée lorsqu'une barre est survolée.
-  console.log("coucou")
-  g.selectAll(".bar")
-   .data(currentData)
+  g.selectAll("bar")
+   .data(currentData.destinations)
    .enter()
    .append("rect")
    .attr("class", "bar")
-   .attr("x", function(d) { var res = x(d.name); console.log(res); return res })
+   .attr("x", d => x(d.name))
    .attr("y", d => y(d.count))
    .style("fill", d => color(d.name))
    .attr("height", d => height - y(d.count))
-   .attr("width", 10)
-   //.on("mouseover", tip.show)
-   //.on("mouseout", tip.hide)
+   .attr("width", 50)
+   .on("mouseover", tip.show)
+   .on("mouseout", tip.hide)
 }
 
 /**
@@ -76,6 +75,26 @@ function transition(g, newData, y, yAxis, height) {
    - La transition doit se faire en 1 seconde.
    */
 
+  var duration = 1000
+
+  console.log(newData)
+  var bars = g.selectAll("bar")
+  console.log("coucou les bars")
+  console.log(bars)
+  console.log("wesh")
+  console.log(newData.destinations)
+   bars.data(newData.destinations)
+   .transition()
+   .duration(duration)
+   .attr("height", function(d) {var res = height - y(d.count); console.log(res); return res})
+   .attr("y", function(d) {var res = y(d.count); console.log(res); return res})
+   .attr("width", 50)
+
+  g.select(".y.axis")
+   .transition()
+   .duration(duration)
+   .call(yAxis);
+ 
 }
 
 /**
@@ -90,5 +109,6 @@ function getToolTipText(d, currentData, formatPercent) {
   // TODO: Retourner le texte à afficher dans l'infobulle selon le format demandé.
   //       Assurez-vous d'utiliser la fonction "formatPercent" pour formater le pourcentage correctement.
 
-  return "";
+  var percent = d.count / d3.sum(currentData.destinations.map(d => d.count))
+  return d.count + " (" + formatPercent(percent) + ")";
 }
