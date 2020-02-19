@@ -26,6 +26,28 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
      - Afficher un élément "title" lorsqu'un groupe est survolé par la souris.
   */
 
+ g.datum(layout)
+ .append("g")
+ .selectAll("g")
+ .data(d => d.groups)
+ .enter()
+ .append("g")
+ .append("path")
+   .attr("id", d => "group" + d.index)
+   .style("fill", d => color(d.index))
+   .style("stroke", "black")
+   .attr("d", arc)
+
+  g.selectAll("text")
+  .data(layout.groups)
+  .enter().append("text")
+    .attr("dx", 0)
+    .attr("dy", 20)
+  .append("textPath")
+    .attr("class", "label")
+    .attr("xlink:href", d => "#group" + d.index) 
+    .text( d => data[d.index].name)
+    .style("fill", "white");
 }
 
 /**
@@ -46,6 +68,19 @@ function createChords(g, data, layout, path, color, total, formatPercent) {
      - Créer les cordes du diagramme avec une opacité de 80%.
      - Afficher un élément "title" lorsqu'une corde est survolée par la souris.
   */
+// Add the links between groups
+
+g.datum(layout)
+.append("g")
+.selectAll("path")
+.data(d => d.groups)
+.enter()
+.append("path")
+ .attr("d", path) // marche po
+ .style("fill", d => color(d.index))
+ .style("stroke", "black");
+
+  
 
 }
 

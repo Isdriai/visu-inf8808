@@ -74,27 +74,18 @@ function transition(g, newData, y, yAxis, height) {
    - Réaliser une transition pour mettre à jour l'axe des Y et la hauteur des barres à partir des nouvelles données.
    - La transition doit se faire en 1 seconde.
    */
-
   var duration = 1000
-
-  console.log(newData)
-  var bars = g.selectAll("bar")
-  console.log("coucou les bars")
-  console.log(bars)
-  console.log("wesh")
-  console.log(newData.destinations)
-   bars.data(newData.destinations)
+  g.selectAll(".bar").data(newData.destinations)
    .transition()
    .duration(duration)
-   .attr("height", function(d) {var res = height - y(d.count); console.log(res); return res})
-   .attr("y", function(d) {var res = y(d.count); console.log(res); return res})
+   .attr("height",d => height - y(d.count))
+   .attr("y", d => y(d.count))
    .attr("width", 50)
 
   g.select(".y.axis")
    .transition()
    .duration(duration)
    .call(yAxis);
- 
 }
 
 /**
