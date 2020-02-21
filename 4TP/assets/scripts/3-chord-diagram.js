@@ -71,9 +71,14 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
  * @param name    Le nom de la station qui doit etre tronqué si trop long.
  */
 function tronc(name) {
-  name = name === "Pontiac / Gilford" ? "Pontiac" : name
-  name = name === "Métro Mont-Royal (Rivard/Mont-Royal)" ? "Métro Mont-Royal" : name
-  return name
+  switch(name) {
+    case "Pontiac / Gilford":
+      return "Pontiac"
+    case "Métro Mont-Royal (Rivard/Mont-Royal)":
+      return "Métro Mont-Royal"
+    default:
+      return name
+  }
 }
 
 /**
@@ -104,8 +109,7 @@ g.datum(layout)
 .append("path")
  .attr("d", path)
  .attr("class", "chord")
- .attr("id", d => "chord_" + d.source.index + "_" + d.target.index)
- .style("fill", d => color(d.source.index))
+ .style("fill", d => color(data[d.source.index].name))
 }
 
 /**
@@ -122,25 +126,16 @@ function initializeGroupsHovered(g) {
 
   var groups = g.selectAll(".group")
   groups.on("mouseover", function(group) {
-    console.log("wesh")
-    /*var paths = g.selectAll(".chord")
-    paths.attr("class", function(chord) {
+    g.selectAll(".chord").attr("class", function(chord) {
       if (!(group.index === chord.source.index || group.index === chord.target.index)) {
-        console.log("toto")
-        console.log(this)
-        console.log(chord)
-        var c = g.select("#chord_" + chord.source.index + "_" + chord.target.index)
-        console.log("coucou")
-        console.log(c)
-        c.style("opacity", 0.1)
+        return "chord notSelectedchord"
+      } else {
+        return "chord"
       }
-    })*/
+    })
   })
 
   groups.on("mouseout", function(d) {
-    console.log("wesh2")
-    /*console.log("ok?")
-    g.selectAll(".chord").style("opacity", 0.8)
-    console.log("ok!")*/
+    g.selectAll(".chord").attr("class", "chord")
 })
 }
