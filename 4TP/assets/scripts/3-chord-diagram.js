@@ -124,8 +124,8 @@ function initializeGroupsHovered(g) {
      - Rétablir l'affichage du diagramme par défaut lorsque la souris sort du cercle du diagramme.
   */
 
-  var groups = g.selectAll(".group")
-  groups.on("mouseover", function(group) {
+  g.selectAll(".group")
+    .on("mouseover", function(group) {
     g.selectAll(".chord").attr("class", function(chord) {
       if (!(group.index === chord.source.index || group.index === chord.target.index)) {
         return "chord notSelectedchord"
@@ -134,8 +134,10 @@ function initializeGroupsHovered(g) {
       }
     })
   })
-
-  groups.on("mouseout", function(d) {
+  var circle = d3.select("#circle")
+  console.log("circle")
+  console.log(circle)
+  circle.on("mouseleave", function(d) {
     g.selectAll(".chord").attr("class", "chord")
-})
+  })
 }
