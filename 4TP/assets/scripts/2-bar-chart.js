@@ -26,7 +26,7 @@ function createAxes(g, xAxis, yAxis, height) {
       .attr("transform","translate(0,0)rotate(45)")
 
       g.append("text")
-        .attr("x",0)
+        .attr("x", 12)
         .attr("y", -10)
         .attr("text-anchor","middle")
         .text("Nombre de trajets")

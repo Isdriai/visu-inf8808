@@ -12,7 +12,7 @@
  * @param total           Le nombre total de trajets réalisés pour le mois d'août 2015.
  * @param formatPercent   Fonction permettant de formater correctement un pourcentage.
  */
-function eventGroupOver(d, data, total, formatPercent) {
+function titleGroupEnter(d, data, total, formatPercent) {
   var name = data[d.index].name
   var totStation = d3.sum(data[d.index].destinations.map(dest => dest.count))
   var percent = formatPercent(totStation/total)
@@ -40,24 +40,24 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
      - Afficher un élément "title" lorsqu'un groupe est survolé par la souris.
   */
 
-  g.datum(layout)
+
+  var groups = g.datum(layout)
    .append("g")
    .selectAll("g")
     .data(d => d.groups)
     .enter()
-    .append("path")
+
+    groups.append("path")
     .attr("id", d => "group" + d.index)
-    .style("fill", d => color(d.index))
-    .style("stroke", "black")
+    .style("fill", d => color(data[d.index].name))
+    .style("stroke", d => color(data[d.index].name))
     .attr("d", arc)
     .attr("class", "group")
-
-  g.selectAll("text")
-  .data(layout.groups)
-  .enter().append("text")
+    
+    groups.append("text")
     .attr("dx", 0)
     .attr("dy", 15)
-  .append("textPath")
+    .append("textPath")
     .attr("class", "text")
     .attr("xlink:href", d => "#group" + d.index) 
     .text( d => tronc(data[d.index].name))
@@ -125,19 +125,17 @@ function initializeGroupsHovered(g) {
   */
 
   g.selectAll(".group")
-    .on("mouseover", function(group) {
+    .on("mouseenter", function(group) {
     g.selectAll(".chord").attr("class", function(chord) {
-      if (!(group.index === chord.source.index || group.index === chord.target.index)) {
-        return "chord notSelectedchord"
-      } else {
+      if (group.index === chord.source.index || group.index === chord.target.index) {
         return "chord"
+      } else {
+        return "chord notSelectedchord" // voir css, ca set la fill-opacity à 0.1
       }
     })
   })
-  var circle = d3.select("#circle")
-  console.log("circle")
-  console.log(circle)
-  circle.on("mouseleave", function(d) {
+
+  d3.select("#circle").on("mouseleave", function(d) {
     g.selectAll(".chord").attr("class", "chord")
   })
 }
