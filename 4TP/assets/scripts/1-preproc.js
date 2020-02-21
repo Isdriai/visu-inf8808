@@ -35,8 +35,9 @@ function domainX(x, data) {
  */
 function domainY(y, currentData) {
   // TODO: Préciser le domaine pour la variable "y" en prenant comme minimum et maximum le nombre de trajets vers une station de BIXI.
-  var maxTraj = d3.max(currentData.destinations.map(d => d.count))
-  var minTraj = d3.min(currentData.destinations.map(d => d.count)) 
+  var counts = currentData.destinations.map(d => d.count)
+  var maxTraj = d3.max(counts)
+  var minTraj = d3.min(counts) 
   y.domain([minTraj, maxTraj])
 }
 

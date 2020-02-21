@@ -16,15 +16,21 @@
 function createAxes(g, xAxis, yAxis, height) {
   // TODO: Dessiner les axes X et Y du graphique. Assurez-vous d'indiquer un titre pour l'axe Y.
   // Axe horizontal
+  
   g.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
     .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", 150)
-      .attr("dy", 100)
-      .attr("transform", d => "rotate(20)" )
+      .style("text-anchor", "start")
+      .attr("transform","translate(0,0)rotate(45)")
+
+      g.append("text")
+        .attr("x",0)
+        .attr("y", -10)
+        .attr("text-anchor","middle")
+        .text("Nombre de trajets")
+        .style("font-size","10px");
 
   // Axe vertical
   g.append("g")
@@ -46,16 +52,16 @@ function createAxes(g, xAxis, yAxis, height) {
 function createBarChart(g, currentData, x, y, color, tip, height) {
   // TODO: Dessiner les cercles à bandes en utilisant les échelles spécifiées.
   //       Assurez-vous d'afficher l'infobulle spécifiée lorsqu'une barre est survolée.
-  g.selectAll("bar")
+  g.selectAll("rect")
    .data(currentData.destinations)
    .enter()
    .append("rect")
-   .attr("class", "bar")
+   .attr("class", "rect")
    .attr("x", d => x(d.name))
    .attr("y", d => y(d.count))
    .style("fill", d => color(d.name))
    .attr("height", d => height - y(d.count))
-   .attr("width", 50)
+   .attr("width", x.bandwidth())
    .on("mouseover", tip.show)
    .on("mouseout", tip.hide)
 }
@@ -73,14 +79,13 @@ function transition(g, newData, y, yAxis, height) {
   /* TODO:
    - Réaliser une transition pour mettre à jour l'axe des Y et la hauteur des barres à partir des nouvelles données.
    - La transition doit se faire en 1 seconde.
-   */
+   */ 
   var duration = 1000
-  g.selectAll(".bar").data(newData.destinations)
+  g.selectAll(".rect").data(newData.destinations)
    .transition()
    .duration(duration)
    .attr("height",d => height - y(d.count))
    .attr("y", d => y(d.count))
-   .attr("width", 50)
 
   g.select(".y.axis")
    .transition()

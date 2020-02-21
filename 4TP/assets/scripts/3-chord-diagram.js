@@ -4,6 +4,20 @@
  * Fichier permettant de dessiner le diagramme à cordes.
  */
 
+/**
+ * Retourne le texte qui doit apparaitre lorsque la souris survolle un groupe.
+ * 
+ * @param d               Les données associées au groupe survollé par la souris. 
+ * @param data            Les données provenant du fichier JSON.
+ * @param total           Le nombre total de trajets réalisés pour le mois d'août 2015.
+ * @param formatPercent   Fonction permettant de formater correctement un pourcentage.
+ */
+function eventGroupOver(d, data, total, formatPercent) {
+  var name = data[d.index].name
+  var totStation = d3.sum(data[d.index].destinations.map(dest => dest.count))
+  var percent = formatPercent(totStation/total)
+  return name + ": " + percent + " des départs"
+}
 
 /**
  * Crée les groupes du diagramme à cordes.
@@ -26,28 +40,40 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
      - Afficher un élément "title" lorsqu'un groupe est survolé par la souris.
   */
 
- g.datum(layout)
- .append("g")
- .selectAll("g")
- .data(d => d.groups)
- .enter()
- .append("g")
- .append("path")
-   .attr("id", d => "group" + d.index)
-   .style("fill", d => color(d.index))
-   .style("stroke", "black")
-   .attr("d", arc)
+  g.datum(layout)
+   .append("g")
+   .selectAll("g")
+    .data(d => d.groups)
+    .enter()
+    .append("path")
+    .attr("id", d => "group" + d.index)
+    .style("fill", d => color(d.index))
+    .style("stroke", "black")
+    .attr("d", arc)
+    .attr("class", "group")
 
   g.selectAll("text")
   .data(layout.groups)
   .enter().append("text")
     .attr("dx", 0)
-    .attr("dy", 20)
+    .attr("dy", 15)
   .append("textPath")
-    .attr("class", "label")
+    .attr("class", "text")
     .attr("xlink:href", d => "#group" + d.index) 
-    .text( d => data[d.index].name)
-    .style("fill", "white");
+    .text( d => tronc(data[d.index].name))
+    .style("fill", "white")
+    .style("font-size","13px")
+}
+
+/**
+ * Fonction qui tronque les noms des stations «Métro Mont-Royal (Rivard/Mont-Royal)» et «Pontiac / Gilford».
+ * 
+ * @param name    Le nom de la station qui doit etre tronqué si trop long.
+ */
+function tronc(name) {
+  name = name === "Pontiac / Gilford" ? "Pontiac" : name
+  name = name === "Métro Mont-Royal (Rivard/Mont-Royal)" ? "Métro Mont-Royal" : name
+  return name
 }
 
 /**
@@ -73,15 +99,13 @@ function createChords(g, data, layout, path, color, total, formatPercent) {
 g.datum(layout)
 .append("g")
 .selectAll("path")
-.data(d => d.groups)
+.data(layout)
 .enter()
 .append("path")
- .attr("d", path) // marche po
- .style("fill", d => color(d.index))
- .style("stroke", "black");
-
-  
-
+ .attr("d", path)
+ .attr("class", "chord")
+ .attr("id", d => "chord_" + d.source.index + "_" + d.target.index)
+ .style("fill", d => color(d.source.index))
 }
 
 /**
@@ -96,4 +120,27 @@ function initializeGroupsHovered(g) {
      - Rétablir l'affichage du diagramme par défaut lorsque la souris sort du cercle du diagramme.
   */
 
+  var groups = g.selectAll(".group")
+  groups.on("mouseover", function(group) {
+    console.log("wesh")
+    /*var paths = g.selectAll(".chord")
+    paths.attr("class", function(chord) {
+      if (!(group.index === chord.source.index || group.index === chord.target.index)) {
+        console.log("toto")
+        console.log(this)
+        console.log(chord)
+        var c = g.select("#chord_" + chord.source.index + "_" + chord.target.index)
+        console.log("coucou")
+        console.log(c)
+        c.style("opacity", 0.1)
+      }
+    })*/
+  })
+
+  groups.on("mouseout", function(d) {
+    console.log("wesh2")
+    /*console.log("ok?")
+    g.selectAll(".chord").style("opacity", 0.8)
+    console.log("ok!")*/
+})
 }
