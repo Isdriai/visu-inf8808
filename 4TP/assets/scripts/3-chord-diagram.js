@@ -41,11 +41,9 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
   */
 
 
-  var groups = g.datum(layout)
-   .append("g")
-   .selectAll("g")
-    .data(d => d.groups)
-    .enter()
+  var groups = g.selectAll("g")
+                .data(layout.groups)
+                .enter()
 
     groups.append("path")
     .attr("id", d => "group" + d.index)
@@ -130,12 +128,12 @@ function initializeGroupsHovered(g) {
       if (group.index === chord.source.index || group.index === chord.target.index) {
         return "chord"
       } else {
-        return "chord notSelectedchord" // voir css, ca set la fill-opacity à 0.1
+        return "chord notSelectedchord" // voir style.css, ca set la fill-opacity à 0.1
       }
     })
   })
 
   d3.select("#circle").on("mouseleave", function(d) {
-    g.selectAll(".chord").attr("class", "chord")
+    g.selectAll(".chord").attr("class", "chord") // ca efface "notSelectedchord"
   })
 }
