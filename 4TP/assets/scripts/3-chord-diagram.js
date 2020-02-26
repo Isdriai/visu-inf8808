@@ -12,10 +12,11 @@
  * @param total           Le nombre total de trajets réalisés pour le mois d'août 2015.
  * @param formatPercent   Fonction permettant de formater correctement un pourcentage.
  */
-function titleGroupEnter(d, data, total, formatPercent) {
+function titleGroup(d, data, total, formatPercent) {
   var name = data[d.index].name
   var totStation = d3.sum(data[d.index].destinations.map(dest => dest.count))
   var percent = formatPercent(totStation/total)
+  console.log(name + ": " + percent + " des départs")
   return name + ": " + percent + " des départs"
 }
 
@@ -44,21 +45,24 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
   var groups = g.selectAll("g")
                 .data(layout.groups)
                 .enter()
-
+                
     groups.append("path")
     .attr("id", d => "group" + d.index)
     .style("fill", d => color(data[d.index].name))
     .style("stroke", d => color(data[d.index].name))
     .attr("d", arc)
     .attr("class", "group")
+    .append("svg:title")
+    .attr("text", d => titleGroup(d, data, total, formatPercent)) 
+    
     
     groups.append("text")
-    .attr("dx", 0)
+    .attr("dx", 4)
     .attr("dy", 15)
     .append("textPath")
     .attr("class", "text")
     .attr("xlink:href", d => "#group" + d.index) 
-    .text( d => tronc(data[d.index].name))
+    .text(d => tronc(data[d.index].name))
     .style("fill", "white")
     .style("font-size","13px")
 }
@@ -99,9 +103,7 @@ function createChords(g, data, layout, path, color, total, formatPercent) {
   */
 // Add the links between groups
 
-g.datum(layout)
-.append("g")
-.selectAll("path")
+g.selectAll("g")
 .data(layout)
 .enter()
 .append("path")
@@ -121,7 +123,7 @@ function initializeGroupsHovered(g) {
        opacité de 80%. Toutes les autres cordes doivent être affichées avec une opacité de 10%.
      - Rétablir l'affichage du diagramme par défaut lorsque la souris sort du cercle du diagramme.
   */
-
+  
   g.selectAll(".group")
     .on("mouseenter", function(group) {
     g.selectAll(".chord").attr("class", function(chord) {
