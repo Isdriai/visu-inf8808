@@ -18,7 +18,7 @@ function createAxes(g, xAxis, yAxis, height) {
   // Axe horizontal
   
   g.append("g")
-    .attr("class", "x axis")
+    .classed("x axis", true)
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
     .selectAll("text")
@@ -34,7 +34,7 @@ function createAxes(g, xAxis, yAxis, height) {
 
   // Axe vertical
   g.append("g")
-    .attr("class", "y axis")
+    .classed("y axis", true)
     .call(yAxis)
 }
 
@@ -56,7 +56,7 @@ function createBarChart(g, currentData, x, y, color, tip, height) {
    .data(currentData.destinations)
    .enter()
    .append("rect")
-   .attr("class", "rect")
+   .classed("rect", true)
    .attr("x", d => x(d.name))
    .attr("y", d => y(d.count))
    .style("fill", d => color(d.name))

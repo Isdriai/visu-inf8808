@@ -7,16 +7,15 @@
 /**
  * Retourne le texte qui doit apparaitre lorsque la souris survolle un groupe.
  * 
- * @param d               Les données associées au groupe survollé par la souris. 
  * @param data            Les données provenant du fichier JSON.
+ * @param d               Les données associées au groupe survollé par la souris. 
  * @param total           Le nombre total de trajets réalisés pour le mois d'août 2015.
  * @param formatPercent   Fonction permettant de formater correctement un pourcentage.
  */
-function titleGroup(d, data, total, formatPercent) {
+function titleGroup(data, d,total, formatPercent) {
   var name = data[d.index].name
   var totStation = d3.sum(data[d.index].destinations.map(dest => dest.count))
   var percent = formatPercent(totStation/total)
-  console.log(name + ": " + percent + " des départs")
   return name + ": " + percent + " des départs"
 }
 
@@ -51,20 +50,20 @@ function createGroups(g, data, layout, arc, color, total, formatPercent) {
     .style("fill", d => color(data[d.index].name))
     .style("stroke", d => color(data[d.index].name))
     .attr("d", arc)
-    .attr("class", "group")
+    .classed("group", true)
     .append("svg:title")
-    .attr("text", d => titleGroup(d, data, total, formatPercent)) 
+    .text(d => titleGroup(data, d, total, formatPercent)) 
     
     
     groups.append("text")
     .attr("dx", 4)
     .attr("dy", 15)
     .append("textPath")
-    .attr("class", "text")
+    .classed("text", true)
     .attr("xlink:href", d => "#group" + d.index) 
     .text(d => tronc(data[d.index].name))
     .style("fill", "white")
-    .style("font-size","13px")
+    .style("font-size", "12px")
 }
 
 /**
@@ -81,6 +80,23 @@ function tronc(name) {
     default:
       return name
   }
+}
+
+/**
+ *  Retourne le texte qui doit apparaitre lorsque la souris survolle une chord.
+ * 
+ * @param data            Les données provenant du fichier JSON.
+ * @param d               Les données associées à la chord survollée par la souris.
+ * @param total           Le nombre total de trajets réalisés pour le mois d'août 2015.
+ * @param formatPercent   Fonction permettant de formater correctement un pourcentage.
+ */
+function titleChord(data, d, total, formatPercent) {
+  var nameChordSource = data[d.source.index].name
+  var nameChordTarget = data[d.target.index].name
+  var percentSource = formatPercent(data[d.source.index].destinations[d.target.index].count/total)
+  var percentTarget = formatPercent(data[d.target.index].destinations[d.source.index].count/total)
+  return nameChordSource + " → " + nameChordTarget + ": " + percentSource + "\n"
+      +  nameChordTarget + " → " + nameChordSource + ": " + percentTarget + "\n"
 }
 
 /**
@@ -104,12 +120,14 @@ function createChords(g, data, layout, path, color, total, formatPercent) {
 // Add the links between groups
 
 g.selectAll("g")
-.data(layout)
-.enter()
-.append("path")
- .attr("d", path)
- .attr("class", "chord")
- .style("fill", d => color(data[d.source.index].name))
+  .data(layout)
+  .enter()
+  .append("path")
+  .attr("d", path)
+  .classed("chord", true)
+  .style("fill", d => color(data[d.source.index].name))
+  .append("svg:title")
+  .text(d => titleChord(data, d, total, formatPercent)) 
 }
 
 /**
@@ -126,16 +144,8 @@ function initializeGroupsHovered(g) {
   
   g.selectAll(".group")
     .on("mouseenter", function(group) {
-    g.selectAll(".chord").attr("class", function(chord) {
-      if (group.index === chord.source.index || group.index === chord.target.index) {
-        return "chord"
-      } else {
-        return "chord notSelectedchord" // voir style.css, ca set la fill-opacity à 0.1
-      }
+    g.selectAll(".chord").classed("fade", function(chord) {
+      return !(group.index === chord.source.index || group.index === chord.target.index)
     })
-  })
-
-  d3.select("#circle").on("mouseleave", function(d) {
-    g.selectAll(".chord").attr("class", "chord") // ca efface "notSelectedchord"
   })
 }

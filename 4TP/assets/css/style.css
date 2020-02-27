@@ -126,9 +126,6 @@ rect:hover {
   fill-opacity: 0.95;
 }
 
-.notSelectedchord {
-  fill-opacity: 0.1;
-}
 
 #circle:hover .fade {
   fill-opacity: 0.1;
