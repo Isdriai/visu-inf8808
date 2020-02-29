@@ -96,7 +96,7 @@ function titleChord(data, d, total, formatPercent) {
   var percentSource = formatPercent(data[d.source.index].destinations[d.target.index].count/total)
   var percentTarget = formatPercent(data[d.target.index].destinations[d.source.index].count/total)
   return nameChordSource + " → " + nameChordTarget + ": " + percentSource + "\n"
-      +  nameChordTarget + " → " + nameChordSource + ": " + percentTarget + "\n"
+      +  nameChordTarget + " → " + nameChordSource + ": " + percentTarget 
 }
 
 /**
