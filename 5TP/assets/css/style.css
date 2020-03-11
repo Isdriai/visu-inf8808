@@ -1,0 +1,181 @@
+/***** General style *****/
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.error {
+  color: #914141;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #eee;
+}
+
+.pull-right {
+  float: right;
+}
+
+/***** Search bar *****/
+#search-bar {
+  position: absolute;
+  top: 10px;
+  left: 60px;
+  display: flex;
+  width: 400px;
+  max-width: 100%;
+}
+
+#search-bar > input {
+  line-height: 35px;
+  padding: 0 10px;
+  border: 1px solid #999;
+  flex: 1;
+  font-size: 11pt;
+}
+
+#search-bar > input:focus {
+  outline: 0;
+  -webkit-box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+#search-bar > button {
+  background-color: #4c7d95;
+  border: 1px solid #999;
+  border-left: 0;
+  outline: 0;
+  flex-basis: 40px;
+  cursor: pointer;
+}
+
+#search-bar > button:hover {
+  background-color: #2b4d5b;
+}
+
+#search-bar > button img {
+  height: 18px;
+}
+
+/***** Panel *****/
+#panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: none;
+  width: 300px;
+  padding: 15px 10px;
+  text-align: left;
+  font-size: 0.7em;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+#panel button {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  float: right;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+}
+
+#panel button:hover {
+  background-color: #ccc;
+}
+
+#panel button img {
+  height: 10px;
+}
+
+#panel h1 {
+  margin-top: 0;
+}
+
+#panel h2 {
+  color: #666;
+  font-size: 1em;
+  text-transform: uppercase;
+}
+
+#panel p {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#panel hr {
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/***** SVG *****/
+.axis {
+  shape-rendering: crispEdges
+}
+
+.axis line {
+  display: none;
+}
+
+.axis path {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path {
+  fill: none;
+  stroke: black;
+  stroke-width: 1.5;
+  shape-rendering: crispEdges;
+}
+
+.district {
+  fill-opacity: 0.8;
+  stroke: #333;
+}
+
+.selected {
+  animation: flash-animation 0.8s ease-out infinite;
+  animation-direction: alternate;
+}
+
+@keyframes flash-animation {
+  from {
+    fill-opacity: 0.8;
+  }
+  to {
+    fill-opacity: 0.1;
+  }
+}
+
+/***** Tooltip *****/
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  border-radius: 2px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.d3-tip:after {
+  display: inline;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin: -1px 0 0 0;
+  box-sizing: border-box;
+  font-size: 10px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
