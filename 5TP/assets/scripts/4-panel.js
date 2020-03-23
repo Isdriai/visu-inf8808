@@ -4,6 +4,14 @@
  * Fichier permettant de gérer l'affichage du panneau d'informations pour une circonscription.
  */
 
+/**
+ *  
+ * @param percentString  Le pourcentage sous forme de String (le dernier caractère doit etre '%').
+ * @return               Le pourcentage sous forme de Float.
+ */
+function percentFloat(percentString) {
+  return parseFloat(percentString.replace("%", "").replace(",", "."))
+ }
 
 /**
  * Met à jour les domaines X et Y utilisés par le diagramme à bandes horizontales lorsque les données sont modifiées.
@@ -20,6 +28,12 @@ function updateDomains(districtSource, x, y) {
          en premier).
    */
 
+  // les sources sont triées, on sait donc ou sont les extremes
+  var sortedRes = districtSource.results
+  var minPercent = sortedRes[sortedRes.length - 1].percent  // plus rapide que de passer par d3.min
+  var maxPercent = sortedRes[0].percent                     // plus rapide que de passer par d3.max
+  x.domain([percentFloat(minPercent), percentFloat(maxPercent)])
+  y.domain(sortedRes.map(res => res.party))
 }
 
 /**
@@ -36,6 +50,10 @@ function updatePanelInfo(panel, districtSource, formatNumber) {
        - Le nombre total de votes pour tous les candidats (utilisez la fonction "formatNumber" pour formater le nombre).
    */
 
+  var bestRes = getBestResult(districtSource.results) // voir 2-map.js pour getBestResult
+  panel.select("#district-name").text(districtSource.name + " [" + districtSource.id + "]")              // voir index.html
+  panel.select("#elected-candidate").text(bestRes.candidate + " (" + bestRes.party + " )")               // voir index.html
+  panel.select("#votes-count").text(formatNumber(d3.sum(districtSource.results.map(res => res.votes))))  // voir index.html
 }
 
 /**
@@ -62,7 +80,39 @@ function updatePanelBarChart(gBars, gAxis, districtSource, x, y, yAxis, color, p
          via la liste "parties" passée en paramètre. Il est à noter que si le parti ne se trouve pas dans la liste "parties",
          vous devez indiquer "Autre" comme forme abrégée.
    */
+  gBars.selectAll("*").remove()
+  gAxis.selectAll("*").remove()
 
+   var otherLabel = "Autre"
+   var shortName = function(name) {
+     var party = parties.find(p => p.name === name)
+     if(typeof party === 'undefined') {
+       return otherLabel
+     }
+     else {
+       return party.abbreviation
+     }
+   }
+
+   gBars.selectAll("rect")
+    .data(districtSource.results)
+    .enter()
+    .append("rect")
+    .attr("y", d => y(d.party))
+    .style("fill", d => shortName(d.party) === otherLabel ? "grey" : color(d.party))
+    .attr("height", y.bandwidth())
+    .attr("width", d => x(percentFloat(d.percent)))
+
+   gBars.selectAll(".text")
+    .data(districtSource.results)
+    .enter()
+    .append("text")
+    .attr("x", d => x(percentFloat(d.percent)) + 5)
+	  .attr("y", d => y(d.party) + y.bandwidth() * 0.64)
+	  .text(d => d.percent)
+
+    gAxis.call(yAxis.tickFormat(shortName))
+      
 }
 
 /**
@@ -72,5 +122,5 @@ function updatePanelBarChart(gBars, gAxis, districtSource, x, y, yAxis, color, p
  */
 function reset(g) {
   // TODO: Réinitialiser l'affichage de la carte en retirant la classe "selected" de tous les éléments.
-
+  g.selectAll(".selected").classed("selected", false)
 }

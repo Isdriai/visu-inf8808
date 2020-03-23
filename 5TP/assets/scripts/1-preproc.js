@@ -64,14 +64,19 @@ function createSources(data) {
   //       en ordre décroissant de votes (le candidat gagnant doit être le premier élément du tableau).
   var sortedData = []
   data.forEach(row => {
+    // creation des données a enregistrer
     var resultRow = {candidate: row.candidate, votes: row.votes, percent: row.percent, party: row.party}
     var circonscription = sortedData.find(obj => obj.id === row.id) 
     if (typeof circonscription === 'undefined') {
+      // si la circonscription n'a pas deja été rencontrée, on la créé dans la structure finale
       circonscription = {id: row.id, name: row.name, results: [resultRow]}
       sortedData.push(circonscription)
     } else {
       circonscription.results.push(resultRow)
     }
   })
+
+  sortedData.forEach(circ => circ.results = circ.results.sort((a, b) => d3.descending(a.votes, b.votes)))
+
   return sortedData
 }

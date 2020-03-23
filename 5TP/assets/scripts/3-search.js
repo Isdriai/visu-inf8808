@@ -26,4 +26,14 @@ function search(map, g, districtId, bound, showPanel) {
       pour cette circonscription en faisant appel à la fonction "showPanel".
    */
 
+   g.selectAll(".path").classed("selected", d => d.properties.NUMCF === districtId)
+   showPanel(districtId)
+   map.fitBounds(bound, {
+      pan: {
+         duration: 1.0,
+         easeLinearity: 0.5,
+      },
+      animate: true, // equivalent a set true l'attribut animate de zoom et pan, voir doc (https://leafletjs.com/reference-0.7.7.html#map-zoompanoptions)  
+      maxZoom: 8
+   })
 }
