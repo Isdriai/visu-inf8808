@@ -30,10 +30,13 @@ function search(map, g, districtId, bound, showPanel) {
    showPanel(districtId)
    map.fitBounds(bound, {
       pan: {
+         animate: true,
          duration: 1.0,
-         easeLinearity: 0.5,
+         easeLinearity: 0.5
       },
-      animate: true, // equivalent a set true l'attribut animate de zoom et pan, voir doc (https://leafletjs.com/reference-0.7.7.html#map-zoompanoptions)  
+      zoom: {
+         animate: true
+      },
       maxZoom: 8
    })
 }
