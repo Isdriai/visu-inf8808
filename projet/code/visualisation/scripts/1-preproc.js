@@ -9,13 +9,14 @@ var listStrTolist = (strs, transfoFun) => removeSymbols(strs, ["\\[", "\\[", "\\
 var listStrTolistInt = (intsStr) => listStrTolist(intsStr, parseInt)
 
 function preprocActors(actors) {
+    var provAbbr = new Set(["NL", "PE", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC", "YT", "NT", "NU"])
     var procActor = (dict, actor) => {
         var act = { id: parseInt(actor.id),
         name: actor.name,
         type: actor['public|private'], // hum tres mauvais choix de nom de colonne dans le csv ... 
         rapportsIds: listStrTolistInt(actor.idsRapport),
         sectors: listStrTolist(actor.sectors, s => s),
-        province: actor.province === "" ? null : actor.province }
+        province: actor.province === "" ? null : provAbbr.has(actor.province) ? actor.province : "International" }
         dict[act.id] = act
         return dict
     }
@@ -107,21 +108,21 @@ function preprocdict(rapports, privates, publics) {
             if (maxSectorName in dict) {
                 if (priv.id in dict[maxSectorName]) {
                     if (pub.type in dict[maxSectorName]) {
-                        dict[maxSectorName][priv.name][pub.type][pub.name] += pub.count
+                        dict[maxSectorName][priv.id][pub.type][pub.id] += pub.count
                     } else{
-                        dict[maxSectorName][priv.name][pub.type] = {}
-                        dict[maxSectorName][priv.name][pub.type][pub.name] = pub.count 
+                        dict[maxSectorName][priv.id][pub.type] = {}
+                        dict[maxSectorName][priv.id][pub.type][pub.id] = pub.count 
                     }
                 } else {
-                    dict[maxSectorName][priv.name] = {}
-                    dict[maxSectorName][priv.name][pub.type] = {}
-                    dict[maxSectorName][priv.name][pub.type][pub.name] = pub.count 
+                    dict[maxSectorName][priv.id] = {}
+                    dict[maxSectorName][priv.id][pub.type] = {}
+                    dict[maxSectorName][priv.id][pub.type][pub.id] = pub.count 
                 }
             } else {
                 dict[maxSectorName] = {}
-                dict[maxSectorName][priv.name] = {}
-                dict[maxSectorName][priv.name][pub.type] = {}
-                dict[maxSectorName][priv.name][pub.type][pub.name] = pub.count 
+                dict[maxSectorName][priv.id] = {}
+                dict[maxSectorName][priv.id][pub.type] = {}
+                dict[maxSectorName][priv.id][pub.type][pub.id] = pub.count 
             }})
         return dict
     }

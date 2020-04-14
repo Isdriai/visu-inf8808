@@ -14,33 +14,21 @@
   var width = window.innerWidth - margin.left - margin.right
   var height = window.innerHeight - margin.top - margin.bottom
 
+  var [idSankey, idBars, idProvince, idHistos] = ["sankey", "barCharts", "barProvince", "histos"]
+  var idsGroups = [idSankey, idBars, idProvince, idHistos]
+  var groups = {}
+  idsGroups.forEach(element => {
+    var div = d3.select("#" + element)
+                .append("svg")
+                .attr("id", "svg"+element)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+    
+    var group = div.append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
-  var svgSankey = d3.select("#sankey-sect")
-              .append("svg")
-              .attr("id", "svgSankey")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
-
-  var sankeyGroup = svgSankey.append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-  var svgBars = d3.select("#bar-charts")
-              .append("svg")
-              .attr("id", "svgBars")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
-
-  var barsGroup = svgBars.append("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-  var svghistos = d3.select("#histos")
-              .append("svg")
-              .attr("id", "svghistos")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
-
-  var histosGroup = svghistos.append("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    groups[element] = group
+  });
 
   var files = ["./data/lobbyingClimatiqueActeurs.csv",
                "./data/lobbyingClimatiquePrivates.csv",
@@ -55,13 +43,19 @@
 
       dict = preprocdict(rapports, privates, publics)
 
-      initSankey(sankeyGroup, dict)
+      initSankey(groups[idSankey], dict)
 
       d3.select("#reset-sankey")
-        .on("click", () => initSankey(sankeyGroup, dict))
+        .on("click", () => {
+          zooms.reset()
+          initSankey(groups[idSankey], dict)
+        })
 
-      initBars(barsGroup, dict, privates)
+
+      initBars(groups[idBars], groups[idProvince], dict, privates)
       d3.select("#reset-bars")
-        .on("click", () => initBars(sankeyGroup, dict, privates))
+        .on("click", () => {
+          initBars(groups[idBars], groups[idProvince], dict, privates)
+        })
   })
 })()
