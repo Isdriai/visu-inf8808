@@ -24,6 +24,24 @@
   var sankeyGroup = svgSankey.append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
+  var svgBars = d3.select("#bar-charts")
+              .append("svg")
+              .attr("id", "svgBars")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+
+  var barsGroup = svgBars.append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  var svghistos = d3.select("#histos")
+              .append("svg")
+              .attr("id", "svghistos")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+
+  var histosGroup = svghistos.append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
   var files = ["./data/lobbyingClimatiqueActeurs.csv",
                "./data/lobbyingClimatiquePrivates.csv",
                "./data/lobbyingClimatiquePublics.csv",
@@ -35,12 +53,15 @@
       publics = preprocPublics(data[2], actors)
       rapports = preprocRapports(data[3])
 
-      dictSankey = sankeyPreproc(rapports, privates, publics)
+      dict = preprocdict(rapports, privates, publics)
 
-      initSankey(sankeyGroup, dictSankey)
+      initSankey(sankeyGroup, dict)
 
       d3.select("#reset-sankey")
-        .on("click", () => resetSankey(sankeyGroup, dictSankey))
-  })
+        .on("click", () => initSankey(sankeyGroup, dict))
 
+      initBars(barsGroup, dict, privates)
+      d3.select("#reset-bars")
+        .on("click", () => initBars(sankeyGroup, dict, privates))
+  })
 })()

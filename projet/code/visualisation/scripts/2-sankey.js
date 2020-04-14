@@ -118,21 +118,18 @@ function computeSelectPrivateNode (dictSankeySect, zoomPub) {
     return prepareForSankey(links)
 }
 
-window.zoomPriv = null
-window.zoomPub = null
-
 function setOnClick(sankeyGroup) {
 
     sankeyGroup.selectAll(".link").on("click", d => {
         if (window.zoomPriv === null &&  window.zoomPub === null) {
-            var [nodesSub, linksSub, pubsSub] = computeSelectLink(dictSankey[d.source.name], d.target.name)
+            var [nodesSub, linksSub, pubsSub] = computeSelectLink(dict[d.source.name], d.target.name)
             drawSankey(sankeyGroup, nodesSub, linksSub, pubsSub)
         }
     })
         
     sankeyGroup.selectAll(".node.pub").on("click", d => {
         if (window.zoomPub === null) {
-            var [nodesSub, linksSub, pubsSub] = computeSelectPublicNode(dictSankey, d.name, window.zoomPriv)
+            var [nodesSub, linksSub, pubsSub] = computeSelectPublicNode(dict, d.name, window.zoomPriv)
             drawSankey(sankeyGroup, nodesSub, linksSub, pubsSub)
             window.zoomPub = d.name
         } 
@@ -140,7 +137,7 @@ function setOnClick(sankeyGroup) {
         
     sankeyGroup.selectAll(".node.priv").on("click", d => {
         if (window.zoomPriv === null) {
-            var [nodesSub, linksSub, pubsSub] = computeSelectPrivateNode(dictSankey[d.name], window.zoomPub)
+            var [nodesSub, linksSub, pubsSub] = computeSelectPrivateNode(dict[d.name], window.zoomPub)
             drawSankey(sankeyGroup, nodesSub, linksSub, pubsSub)
             window.zoomPriv = d.name 
         }
@@ -219,12 +216,8 @@ function drawSankey (sankeyGroup, nodes, links, pubs) {
 }
 
 function initSankey (sankeyGroup, dictSankey) {
-    var [nodes, links, pubs] = computeNodesLinksInit(dictSankey)
-    drawSankey(sankeyGroup, nodes, links, pubs)
-}
-
-function resetSankey(sankeyGroup, dictSankey) {
     window.zoomPriv = null
     window.zoomPub = null
-    initSankey(sankeyGroup, dictSankey)
+    var [nodes, links, pubs] = computeNodesLinksInit(dictSankey)
+    drawSankey(sankeyGroup, nodes, links, pubs)
 }

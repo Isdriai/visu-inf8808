@@ -33,7 +33,9 @@ function preprocPrivates(privates, actors) {
         var privId = parseInt(priv.id)
         var privateActor = { id: privId,
         name: actors[privId].name,
-        sectors: listStrTolist(priv.sectors, s => s).map(aggreg) }
+        sectors: listStrTolist(priv.sectors, s => s).map(aggreg),
+        province: actors[privId].province
+        }
         dict[privateActor.id] = privateActor
         return dict
     }
@@ -90,7 +92,7 @@ function linkPublicsByPrivateId(rapports, publics, privId) {
     return Object.values(raps).reduce(fetchPublicsByRapport, {})
 }
 
-function sankeyPreproc(rapports, privates, publics) {
+function preprocdict(rapports, privates, publics) {
     var groupBySector = (dict, priv) => {
         var maxSector = ([name, nbr], priv2) => {
             if (priv2.name.includes("limat")) {
