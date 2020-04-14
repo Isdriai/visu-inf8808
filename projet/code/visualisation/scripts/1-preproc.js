@@ -8,79 +8,121 @@ var listStrTolist = (strs, transfoFun) => removeSymbols(strs, ["\\[", "\\[", "\\
 
 var listStrTolistInt = (intsStr) => listStrTolist(intsStr, parseInt)
 
-// on va devoir recouper les données, on veut donc etre sur que ces dernieres soient triées 
-var compareFun = (obj1, obj2) => obj1.id - obj2.id
-
 function preprocActors(actors) {
-    var procActor = (actor) => ({
-        id: parseInt(actor.id),
+    var procActor = (dict, actor) => {
+        var act = { id: parseInt(actor.id),
         name: actor.name,
-        type: actor['public|private'], // hum tres mauvais choix de nom de colonne dans le csv ... méchant Dobby
+        type: actor['public|private'], // hum tres mauvais choix de nom de colonne dans le csv ... 
         rapportsIds: listStrTolistInt(actor.idsRapport),
         sectors: listStrTolist(actor.sectors, s => s),
-        province: actor.province === "" ? null : actor.province
-    })
-    return actors.map(procActor).sort(compareFun)
+        province: actor.province === "" ? null : actor.province }
+        dict[act.id] = act
+        return dict
+    }
+    return actors.reduce(procActor, {})
 }
 
-function preprocPrivates(privates) {
+function preprocPrivates(privates, actors) {
     // dans notre cas, on ne rencontre jamais deux fois le meme secteur
     var aggreg = (strTuple) => { 
         var tab = strTuple.split(":")
         return {name: tab[0], value: tab[1]}
     }
-    var procPrivate = (priv) => ({
-        id: parseInt(priv.id),
-        sectors: listStrTolist(priv.sectors, s => s).map(aggreg)
-    })
-    return privates.map(procPrivate).sort(compareFun)
+    
+    var procPrivate = (dict, priv) => {
+        var privId = parseInt(priv.id)
+        var privateActor = { id: privId,
+        name: actors[privId].name,
+        sectors: listStrTolist(priv.sectors, s => s).map(aggreg) }
+        dict[privateActor.id] = privateActor
+        return dict
+    }
+    return privates.reduce(procPrivate, {})
 }
 
-function preprocPublics(publics) {
-    return publics.map(pub => ({
-        id: parseInt(pub.idPublic),
-        type: pub.type
-    })).sort(compareFun)
+function preprocPublics(publics, actors) {
+    return publics.reduce((dict, pub) => {
+        var pubId = parseInt(pub.idPublic)
+        var publicActor = { id: pubId,
+                            type: pub.type,
+                            name: actors[pubId].name
+                        }
+        dict[publicActor.id] = publicActor
+        return dict
+    }, {})
 }
 
 function preprocRapports(rapports) {
     var formatDate = d3.timeParse("%Y-%m-%d")
-    var procRapport = (rapport) => ({
-        id: parseInt(rapport.idCom),
+    var keptUniqueValues = (list) => {
+        var values = new Set()
+        list.forEach(v => values.add(v))
+        return [...values]
+    }
+    var procRapport = (dict, rapport) => {
+        var rap = { id: parseInt(rapport.idCom),
         privateId: listStrTolistInt(rapport.privatesIds)[0], // on remarquera qu'il y a toujours qu'une seule entreprise liée à un rapport
-        publicsIds: listStrTolistInt(rapport.publicsIds), // TODO : enlever les doublons
-        date: formatDate(rapport.date)
-    })
-    return rapports.map(procRapport).sort(compareFun)
+        publicsIds: keptUniqueValues(listStrTolistInt(rapport.publicsIds)),
+        date: formatDate(rapport.date) }
+        if (rap.privateId in dict) {
+            dict[rap.privateId].push(rap)
+        } else {
+            dict[rap.privateId] = [rap]
+        }
+        return dict
+    }
+    return rapports.reduce(procRapport, {})
 }
 
-
+function linkPublicsByPrivateId(rapports, publics, privId) {
+    var raps = rapports[privId]
+    var fetchPublicsByRapport = (dict, rap) => {
+        rap.publicsIds.forEach(pubId => {
+            var pubActor = publics[pubId]
+            if (pubId in dict) {
+                dict[pubId].count += 1
+            } else {
+                dict[pubId] = {id: pubId, name: pubActor.name, type: pubActor.type, count: 1}
+            }
+        })
+        return dict
+    }
+    return Object.values(raps).reduce(fetchPublicsByRapport, {})
+}
 
 function sankeyPreproc(rapports, privates, publics) {
     var groupBySector = (dict, priv) => {
         var maxSector = ([name, nbr], priv2) => {
-            if (priv2.name === "Climate") {
+            if (priv2.name.includes("limat")) {
                 return [name, nbr]
             } else {
                 return priv2.value > nbr ? [priv2.name, priv2.value] : [name, nbr]
             }
         }
         var [maxSectorName, _] = priv.sectors.reduce(maxSector, ["", 0])
-        publics = fetch public liés a ce priv avec public {name: , type: , count: }
-        publics.forEach(public => {
-            var recordPublic = {name: public.name, count: public.count}
-            if (maxSector in dict) {
-                if (public.type in dict[maxSector]) {
-                    dict[maxSector][public.type].push(recordPublic)
-                } 
+        var publicsPriv = linkPublicsByPrivateId(rapports, publics, priv.id)
+        Object.values(publicsPriv).forEach(pub => {
+            if (maxSectorName in dict) {
+                if (priv.id in dict[maxSectorName]) {
+                    if (pub.type in dict[maxSectorName]) {
+                        dict[maxSectorName][priv.name][pub.type][pub.name] += pub.count
+                    } else{
+                        dict[maxSectorName][priv.name][pub.type] = {}
+                        dict[maxSectorName][priv.name][pub.type][pub.name] = pub.count 
+                    }
+                } else {
+                    dict[maxSectorName][priv.name] = {}
+                    dict[maxSectorName][priv.name][pub.type] = {}
+                    dict[maxSectorName][priv.name][pub.type][pub.name] = pub.count 
+                }
             } else {
-                dict[maxSector] = {}
-                dict[maxSector][public.type] = [recordPublic]
+                dict[maxSectorName] = {}
+                dict[maxSectorName][priv.name] = {}
+                dict[maxSectorName][priv.name][pub.type] = {}
+                dict[maxSectorName][priv.name][pub.type][pub.name] = pub.count 
             }})
         return dict
     }
-    console.log("privates")
-    console.log(privates)
-    console.log("test")
-    console.log(privates.reduce(groupBySector, {}))
+
+    return Object.values(privates).reduce(groupBySector, {})
 }

@@ -1,21 +1,23 @@
 
 (function () {
-    
-    /***** Configuration *****/
+
+  var [W, H] = [window.innerWidth, window.innerHeight]
+  var [mW, mH] = [W*0.1, H*0.1]
+
   var margin = {
-    top: 50,
-    right: 50,
-    bottom: 50,
-    left: 80
+    top: mH,
+    right: mW,
+    bottom: mH,
+    left: mW
   }
 
-  var width = 1000 - margin.left - margin.right
-  var height = 600 - margin.top - margin.bottom
+  var width = window.innerWidth - margin.left - margin.right
+  var height = window.innerHeight - margin.top - margin.bottom
 
-  var sankey = d3.sankey()
 
   var svgSankey = d3.select("#sankey-sect")
               .append("svg")
+              .attr("id", "svgSankey")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
 
@@ -29,15 +31,16 @@
 
   Promise.all(files.map(pathFile => d3.csv(pathFile))).then(function (data) {
       actors = preprocActors(data[0])
-      privates = preprocPrivates(data[1])
-      publics = preprocPublics(data[2])
+      privates = preprocPrivates(data[1], actors)
+      publics = preprocPublics(data[2], actors)
       rapports = preprocRapports(data[3])
+
       dictSankey = sankeyPreproc(rapports, privates, publics)
-      var setSankey = () => initSankey(sankeyGroup, dictSankey)
-      
-      setSankey()
+
+      initSankey(sankeyGroup, dictSankey)
+
       d3.select("#reset-sankey")
-        .on("click", setSankey)
+        .on("click", () => resetSankey(sankeyGroup, dictSankey))
   })
 
 })()
