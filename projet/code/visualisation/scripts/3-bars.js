@@ -20,6 +20,63 @@ function countBySect(dict) {
     }))
 }
 
+function countByActor(dict) {
+    var byPubType = {}
+    Object.keys(dict).forEach(sect => {
+        Object.keys(dict[sect]).forEach(priv => {
+            Object.keys(dict[sect][priv]).forEach(typePub => {
+                Object.keys(dict[sect][priv][typePub]).forEach(pub => {
+                    var byTypePubEntry = byPubType[typePub]
+                    if (typeof byTypePubEntry === 'undefined') {
+                        byPubType[typePub] = {}
+                        byPubType[typePub][pub] = {
+                            name: pub,
+                            count: dict[sect][priv][typePub][pub]
+                        }
+                    } else {
+                        var byAactorEntry = byTypePubEntry[pub]
+                        if (typeof byAactorEntry === 'undefined') {
+                            byTypePubEntry[pub] = {
+                                name: pub,
+                                count: dict[sect][priv][typePub][pub]
+                            }
+                        } else {
+                            byPubType[typePub][pub].count += dict[sect][priv][typePub][pub]
+                        }
+                    }
+                })
+            })
+        })
+    })
+
+    return byPubType
+}
+
+function countByTypePub(dict) {
+    var byType = {}
+
+    var countBySingleTypePub = (dictType) => d3.sum(Object.keys(dictType).map(pub => dictType[pub]))
+
+    Object.keys(dict).forEach(sect => {
+        Object.keys(dict[sect]).forEach(priv => {
+            Object.keys(dict[sect][priv]).forEach(typePub => {
+                var byTypeEntry = byType[typePub]
+                var value = countBySingleTypePub(dict[sect][priv][typePub])
+                if (typeof byTypeEntry === 'undefined') {
+                    byType[typePub] = {
+                        name: typePub,
+                        count: value
+                    }
+                } else {
+                    byType[typePub].count += value
+                }
+            })
+        })
+    })
+
+    return Object.values(byType)
+}
+
 function countByProv(dict, privates) {
     var byProv = {}
     Object.keys(dict).forEach(sect => {
@@ -80,28 +137,52 @@ function drawBars(barsGroup, data, x, y, xAxis, yAxis, height, funX) {
         .attr("height", d => height - y(d.count))
 }
 
-function setOnclick(barsGroup, dict, height, width) {
+function setOnclick(barsGroup, height, width, funCount) {
     barsGroup.selectAll(".rect")
         .on("click", d => {
-            var countBypriv = countByPriv(dict[d.name])
-            var [x, y, xAxis, yAxis] = createAxesLadders(countBypriv, height, width, d => d.name)
-            drawBars(barsGroup, countBypriv, x, y, xAxis, yAxis, height, d => d.name)
+            var countByX = funCount(d.name)
+            var [x, y, xAxis, yAxis] = createAxesLadders(countByX, height, width, d => d.name)
+            drawBars(barsGroup, countByX, x, y, xAxis, yAxis, height, d => d.name)
         })
 }
 
+function setMode(funPriv, funPub) {
+    d3.select("#public").on("click", () => funPub())
+    d3.select("#private").on("click", () => funPriv())
+}
+
+
 function initBars(barsGroup, barProvinceGroup, dict, privates) {
     
-    var dataBySect = countBySect(dict)
+    var funPriv = () => {
+        var dataBySect = countBySect(dict)
 
-    var svgBars = d3.select("#svgbarCharts")
-    var heightBars = svgBars.attr("height")*0.5
-    var widthBars = svgBars.attr("width")*0.5
+        var svgBars = d3.select("#svgbarCharts")
+        var heightBars = svgBars.attr("height")*0.5
+        var widthBars = svgBars.attr("width")*0.5
 
-    var [x, y, xAxis, yAxis] = createAxesLadders(dataBySect, heightBars, widthBars, d => d.name)
+        var [x, y, xAxis, yAxis] = createAxesLadders(dataBySect, heightBars, widthBars, d => d.name)
 
-    drawBars(barsGroup, dataBySect, x, y, xAxis, yAxis, heightBars, d => d.name)
-    setOnclick(barsGroup, dict, heightBars, widthBars)
+        drawBars(barsGroup, dataBySect, x, y, xAxis, yAxis, heightBars, d => d.name)
+        setOnclick(barsGroup, heightBars, widthBars, name => countByPriv(dict[name]))
+    }
+    funPriv()
 
+
+    var funPub = () => {
+        var dataByTypePub = countByTypePub(dict)
+
+        var svgBars = d3.select("#svgbarCharts")
+        var heightBars = svgBars.attr("height")*0.5
+        var widthBars = svgBars.attr("width")*0.5
+
+        var [x, y, xAxis, yAxis] = createAxesLadders(dataByTypePub, heightBars, widthBars, d => d.name)
+        drawBars(barsGroup, dataByTypePub, x, y, xAxis, yAxis, heightBars, d => d.name)
+        var dictByActor = countByActor(dict)
+        setOnclick(barsGroup, heightBars, widthBars, name => Object.values(dictByActor[name]))
+    }
+
+    setMode(funPriv, funPub)
 
     var svgBarProvince = d3.select("#svgbarProvince")
     var heightProv = svgBarProvince.attr("height")*0.5

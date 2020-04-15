@@ -57,5 +57,7 @@
         .on("click", () => {
           initBars(groups[idBars], groups[idProvince], dict, privates)
         })
+
+      initHistos()
   })
 })()
