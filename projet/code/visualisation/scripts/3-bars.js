@@ -151,7 +151,6 @@ function setMode(funPriv, funPub) {
     d3.select("#private").on("click", () => funPriv())
 }
 
-
 function initBars(barsGroup, barProvinceGroup, dict, privates) {
     
     var funPriv = () => {

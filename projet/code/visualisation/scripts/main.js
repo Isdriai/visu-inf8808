@@ -1,5 +1,5 @@
 
-(function () {
+(function (d3, localization) {
 
   var [W, H] = [window.innerWidth, window.innerHeight]
   var [mW, mH] = [W*0.1, H*0.1]
@@ -18,11 +18,12 @@
   var idsGroups = [idSankey, idBars, idProvince, idHistos]
   var groups = {}
   idsGroups.forEach(element => {
+    var coefH = element === idHistos ? 2 : 1
     var div = d3.select("#" + element)
                 .append("svg")
                 .attr("id", "svg"+element)
                 .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+                .attr("height", height * coefH + margin.top + margin.bottom)
     
     var group = div.append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -58,6 +59,7 @@
           initBars(groups[idBars], groups[idProvince], dict, privates)
         })
 
-      initHistos()
+      var [byDatePriv, byDatePub] = preprocDate(rapports, privates, publics)
+      initHistos(groups[idHistos], byDatePriv, byDatePub, localization)
   })
-})()
+})(d3, localization)

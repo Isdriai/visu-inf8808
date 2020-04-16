@@ -93,16 +93,22 @@ function linkPublicsByPrivateId(rapports, publics, privId) {
     return Object.values(raps).reduce(fetchPublicsByRapport, {})
 }
 
+function getSector(priSectors) {
+    var maxSector = ([name, nbr], priv2) => {
+        if (priv2.name.includes("limat")) {
+            return [name, nbr]
+        } else {
+            return priv2.value > nbr ? [priv2.name, priv2.value] : [name, nbr]
+        }
+    }
+    var [maxSectorName, _] = priSectors.reduce(maxSector, ["", 0])
+    return maxSectorName
+}
+
 function preprocdict(rapports, privates, publics) {
     var groupBySector = (dict, priv) => {
-        var maxSector = ([name, nbr], priv2) => {
-            if (priv2.name.includes("limat")) {
-                return [name, nbr]
-            } else {
-                return priv2.value > nbr ? [priv2.name, priv2.value] : [name, nbr]
-            }
-        }
-        var [maxSectorName, _] = priv.sectors.reduce(maxSector, ["", 0])
+        
+        var maxSectorName = getSector(priv.sectors)
         var publicsPriv = linkPublicsByPrivateId(rapports, publics, priv.id)
         Object.values(publicsPriv).forEach(pub => {
             if (maxSectorName in dict) {
@@ -128,4 +134,48 @@ function preprocdict(rapports, privates, publics) {
     }
 
     return Object.values(privates).reduce(groupBySector, {})
+}
+
+function preprocDate(rapports, privates, publics) {
+    var publicsDate = {}
+    var privatesDate = {}
+
+    Object.keys(rapports).forEach(privId => {
+        var rapport = rapports[privId]
+        var sect = getSector(privates[privId].sectors)
+        var date = rapport.date
+        date.setDay(0)
+        var privEntry = privatesDate[sect]
+
+        if (typeof privEntry === 'undefined') {
+            privatesDate[sect][date] = {
+                date: date,
+                count: 1
+            } 
+        } else {
+            privatesDate[sect][date] = {
+                date: date,
+                count: +1
+            } 
+        }
+
+        rapport.publicsIds.forEach(pubId => {
+            var type = publics[pubId].type
+            var publicEntry = publicsDate[type]
+            if (typeof publicEntry === 'undefined') {
+                publicsDate[type] = {}
+                publicsDate[type][date] = {
+                    date: date,
+                    count: 1
+                }
+            } else {
+                publicsDate[type][date] = {
+                    date: date,
+                    count: +1
+                }
+            }
+        })
+    })
+
+    return [privatesDate, publicsDate]
 }

@@ -121,7 +121,6 @@ function computeSelectPrivateNode (dictSankeySect, zoomPub) {
 
 var zooms = (() => {
     var [zoomPriv, zoomPub] = [null, null] 
-
     return {
         getZoomPriv: () => zoomPriv,
         getZoomPub: () => zoomPub,
@@ -160,7 +159,6 @@ function setOnClick(sankeyGroup) {
     })
 }
     
-
 function drawSankey (sankeyGroup, nodes, links, pubs) {
 
     sankeyGroup.selectAll("*").remove()
