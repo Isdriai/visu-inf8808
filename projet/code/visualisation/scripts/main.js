@@ -14,16 +14,15 @@
   var width = window.innerWidth - margin.left - margin.right
   var height = window.innerHeight - margin.top - margin.bottom
 
-  var [idSankey, idBars, idProvince, idHistos] = ["sankey", "barCharts", "barProvince", "histos"]
-  var idsGroups = [idSankey, idBars, idProvince, idHistos]
+  var [idSankey, idBars, idProvince, idHistosPriv, idHistosPub] = ["sankey", "barCharts", "barProvince", "histosPriv", "histosPub"]
+  var idsGroups = [idSankey, idBars, idProvince, idHistosPriv, idHistosPub]
   var groups = {}
   idsGroups.forEach(element => {
-    var coefH = element === idHistos ? 2 : 1
     var div = d3.select("#" + element)
                 .append("svg")
                 .attr("id", "svg"+element)
                 .attr("width", width + margin.left + margin.right)
-                .attr("height", height * coefH + margin.top + margin.bottom)
+                .attr("height", height + margin.top + margin.bottom)
     
     var group = div.append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -52,7 +51,6 @@
           initSankey(groups[idSankey], dict)
         })
 
-
       initBars(groups[idBars], groups[idProvince], dict, privates)
       d3.select("#reset-bars")
         .on("click", () => {
@@ -60,6 +58,6 @@
         })
 
       var [byDatePriv, byDatePub] = preprocDate(rapports, privates, publics)
-      initHistos(groups[idHistos], byDatePriv, byDatePub, localization)
+      initHistos(groups[idHistosPriv], groups[idHistosPub], byDatePriv, byDatePub, localization)
   })
 })(d3, localization)

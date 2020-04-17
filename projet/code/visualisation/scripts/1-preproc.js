@@ -136,46 +136,70 @@ function preprocdict(rapports, privates, publics) {
     return Object.values(privates).reduce(groupBySector, {})
 }
 
+
+function sortByDate(byDate) {
+    Object.keys(byDate).forEach(sect => {
+        byDate[sect] = Object.values(byDate[sect])
+        byDate[sect] = byDate[sect].sort((e1, e2) => d3.ascending(e1.date, e2.date))
+    })
+}
+
 function preprocDate(rapports, privates, publics) {
     var publicsDate = {}
     var privatesDate = {}
 
     Object.keys(rapports).forEach(privId => {
-        var rapport = rapports[privId]
-        var sect = getSector(privates[privId].sectors)
-        var date = rapport.date
-        date.setDay(0)
-        var privEntry = privatesDate[sect]
+        var rapportsPriv = rapports[privId]
+        Object.keys(rapportsPriv).forEach(rapId => {
+            var rapport = rapportsPriv[rapId]
+            var sect = getSector(privates[privId].sectors)
+            var dateRap = rapport.date
+            // attention, getYear donne le nombre d'années depuis 1900 !!! Quelle idée ...
+            var date = new Date(1900 + dateRap.getYear(), dateRap.getMonth()) // on ne s'interesse pas au jour 
+            var privEntry = privatesDate[sect]
 
-        if (typeof privEntry === 'undefined') {
-            privatesDate[sect][date] = {
-                date: date,
-                count: 1
-            } 
-        } else {
-            privatesDate[sect][date] = {
-                date: date,
-                count: +1
-            } 
-        }
-
-        rapport.publicsIds.forEach(pubId => {
-            var type = publics[pubId].type
-            var publicEntry = publicsDate[type]
-            if (typeof publicEntry === 'undefined') {
-                publicsDate[type] = {}
-                publicsDate[type][date] = {
+            if (typeof privEntry === 'undefined') {
+                privatesDate[sect] = {}
+                privatesDate[sect][date] = {
                     date: date,
                     count: 1
-                }
+                } 
             } else {
-                publicsDate[type][date] = {
-                    date: date,
-                    count: +1
+                if (typeof privatesDate[sect][date] === 'undefined') {
+                    privatesDate[sect][date] = {
+                        date: date,
+                        count: 1
+                    } 
+                } else {
+                    privatesDate[sect][date].count += 1
                 }
+                
             }
-        })
+
+            rapport.publicsIds.forEach(pubId => {
+                var type = publics[pubId].type
+                var publicEntry = publicsDate[type]
+                if (typeof publicEntry === 'undefined') {
+                    publicsDate[type] = {}
+                    publicsDate[type][date] = {
+                        date: date,
+                        count: 1
+                    }
+                } else {
+                    if (typeof publicsDate[type][date] === 'undefined') {
+                        publicsDate[type][date] = {
+                            date: date,
+                            count: 1
+                        }
+                    } else {
+                        publicsDate[type][date].count += 1
+                    }
+                }
+            })
+        }) 
     })
 
+    sortByDate(privatesDate)
+    sortByDate(publicsDate)
     return [privatesDate, publicsDate]
 }

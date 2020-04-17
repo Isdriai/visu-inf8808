@@ -35,7 +35,7 @@ function prepareForSankey(links) {
     return [nodes, links, pubs]
 }
 
-function computeNodesLinksInit (dictSankey) {
+function computeNodesLinksInit(dictSankey) {
     var linksBySector = []
     var links = []
     Object.keys(dictSankey).forEach(sector => {
@@ -67,7 +67,7 @@ function computeNodesLinksInit (dictSankey) {
     return prepareForSankey(links)
 }
 
-function computeSelectLink (dictSector, publicType) {
+function computeSelectLink(dictSector, publicType) {
     var links = []
     Object.keys(dictSector).forEach(priv => {
         var publicTypeEntries = dictSector[priv][publicType]
@@ -80,7 +80,7 @@ function computeSelectLink (dictSector, publicType) {
     return prepareForSankey(links)
 }
 
-function computeSelectPublicNode (dictSankey, typePub, zoomPriv) {
+function computeSelectPublicNode(dictSankey, typePub, zoomPriv) {
     if (zoomPriv === null) {
         var links = []
         Object.keys(dictSankey).forEach(sect => {
@@ -99,7 +99,7 @@ function computeSelectPublicNode (dictSankey, typePub, zoomPriv) {
     }
 }
 
-function computeSelectPrivateNode (dictSankeySect, zoomPub) {
+function computeSelectPrivateNode(dictSankeySect, zoomPub) {
     var links = []
     Object.keys(dictSankeySect).forEach(priv => {
         Object.keys(dictSankeySect[priv]).forEach(typePub => {
@@ -159,7 +159,7 @@ function setOnClick(sankeyGroup) {
     })
 }
     
-function drawSankey (sankeyGroup, nodes, links, pubs) {
+function drawSankey(sankeyGroup, nodes, links, pubs) {
 
     sankeyGroup.selectAll("*").remove()
 
@@ -229,7 +229,7 @@ function drawSankey (sankeyGroup, nodes, links, pubs) {
     return sankey
 }
 
-function initSankey (sankeyGroup, dictSankey) {
+function initSankey(sankeyGroup, dictSankey) {
     var [nodes, links, pubs] = computeNodesLinksInit(dictSankey)
     drawSankey(sankeyGroup, nodes, links, pubs)
 }
