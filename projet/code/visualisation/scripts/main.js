@@ -1,5 +1,5 @@
 
-(function (d3, localization) {
+(function (d3) {
 
   var [W, H] = [window.innerWidth, window.innerHeight]
   var [mW, mH] = [W*0.1, H*0.1]
@@ -58,6 +58,6 @@
         })
 
       var [byDatePriv, byDatePub] = preprocDate(rapports, privates, publics)
-      initHistos(groups[idHistosPriv], groups[idHistosPub], byDatePriv, byDatePub, localization)
+      initHistos(groups[idHistosPriv], groups[idHistosPub], byDatePriv, byDatePub)
   })
-})(d3, localization)
+})(d3)

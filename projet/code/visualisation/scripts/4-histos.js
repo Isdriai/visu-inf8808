@@ -4,7 +4,9 @@ function createLine(x, y) {
     return d3.line()
         .x(d => x(d.date))
         .y(d => y(d.count))
-        .curve(d3.curveBasisOpen)
+        .curve(d3.curveMonotoneX) 
+        // on voit bien les extremes mais on garde une certaine courbure pr garder une certaine esthétique,
+        // la ou avec curveOpenBasis on perdait les extremes
 }
 
 function createLadders(width, heightFocus, heightContext) {
@@ -27,10 +29,10 @@ function createLadders(width, heightFocus, heightContext) {
  * @param color     L'échelle de couleurs ayant une couleur associée à un nom de rue.
  * @param name      Nom à donner à la LineChart.
  */
-function createLineChart(g, datum, line, color, name) {
+function createLineChart(g, datum, line, color, name, id) {
     return g.append("path")
       .datum(datum)
-      .attr("class", "line")
+      .attr("class", "line" + id)
       .attr("d", line)
       .style("stroke", color(name))
       .attr("fill", "none")
@@ -48,7 +50,7 @@ function createFocusLineChart(g, sources, line, color) {
     // TODO: Dessiner le graphique focus dans le groupe "g".
     // Pour chacun des "path" que vous allez dessiner, spécifier l'attribut suivant: .attr("clip-path", "url(#clip)").
     Object.keys(sources).forEach(sect => {
-        createLineChart(g, sources[sect], line, color, sect).attr("clip-path", "url(#clip)")
+        createLineChart(g, sources[sect], line, color, sect, "Focus").attr("clip-path", "url(#clip)")
     })
   }
   
@@ -63,11 +65,11 @@ function createFocusLineChart(g, sources, line, color) {
    */
 function createContextLineChart(g, sources, line, color) {
     Object.keys(sources).forEach(sect => {
-        createLineChart(g, sources[sect], line, color, sect)
+        createLineChart(g, sources[sect], line, color, sect, "Context")
     })
 }
 
-function createAxes(xFocus, yFocus, xContext, localization) {
+function createAxes(xFocus, yFocus, xContext) {
     var xAxisFocus = d3.axisBottom(xFocus)
     var yAxisFocus = d3.axisLeft(yFocus)
     var xAxisContext = d3.axisBottom(xContext)
@@ -79,14 +81,10 @@ function createGroups(group, height) {
         .attr("transform", "translate(" + 0 + "," + 0 + ")")
 
     var context = group.append("g")
-        .attr("transform", "translate(" + 0 + "," + height + ")")
+        .attr("transform", "translate(" + 0 + "," + height * 1.1 + ")")
 
     return [focus, context]
 }
-
-/**
- * Fichier permettant de générer la légende et de gérer les interactions de celle-ci.
- */
 
 
 /**
@@ -147,31 +145,59 @@ function linkAxisBrushes(context, xAxisContext, brush, heightHisto) {
       .attr("height", heightHisto + 7)
 }
 
-function brushUpdate(brush, g, line, xFocus, xContext, xAxis, yAxisFocus) {
-    // brush et yAxisFocus inutiles
+function brushUpdate(g, line, xFocus, xContext, xAxis, id) {
+    console.log("\n\n\n\n")
     var s = d3.event.selection || xContext.range()
+    console.log(s)
     var inr = xContext.invert
+    console.log(inr)
+    console.log(s.map(inr, xContext))
     xFocus.domain(s.map(inr, xContext))
-    var places = g.selectAll(".line")
-    places.attr("d", line)
-    var axe = d3.select(".x.axis") // l'id a été ajouté dans le fichier main.js
+    var lines = d3.selectAll(".lineFocus")
+    console.log(lines)
+    lines.attr("d", line)
+    var axe = d3.select("#xAxis" + id) 
+    console.log(axe)
     axe.call(xAxis)
+    console.log("\n\n\n\n")
   }
   
 function setDomains(xFocus, yFocus, xContext, yContext, data) {
     
     var dateMin = d3.min(Object.values(data).map(d => d3.min(d.map(elem => elem.date))))
     var dateMax = d3.max(Object.values(data).map(d => d3.max(d.map(elem => elem.date))))
-    var countMin = 0
     var countMax = d3.max(Object.values(data).map(d => d3.max(d.map(elem => elem.count))))
 
     xFocus.domain([dateMin, dateMax])
     xContext.domain([dateMin, dateMax])
-    yFocus.domain([countMin, countMax])
-    yContext.domain([countMin, countMax])
+    yFocus.domain([0, countMax])
+    yContext.domain([0, countMax])
 }
 
-function initHistos(groupPriv, groupPub, byDatePriv, byDatePub, localization){
+function setAxes(focus, height, xAxis, yAxis, idXAxis) {
+  focus.append("g")
+    .attr("class", "x axis")
+    .attr("id", "xAxis" + idXAxis)
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+
+    if (yAxis !== null) {
+      focus.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)  
+    }
+}
+
+function setBrush(context, brush, height) {
+  context.append("g")
+      .attr("class", "x brush")
+      .call(brush)
+      .selectAll("rect")
+      .attr("y", -6)
+      .attr("height", height);
+}
+
+function initHistos(groupPriv, groupPub, byDatePriv, byDatePub){
 
     // meme dimension pr les deux graphes
     var svgBars = d3.select("#svghistosPriv")
@@ -185,8 +211,8 @@ function initHistos(groupPriv, groupPub, byDatePriv, byDatePub, localization){
     setDomains(xFocusPriv, yFocusPriv, xContextPriv, yContextPriv, byDatePriv)
     setDomains(xFocusPub, yFocusPub, xContextPub, yContextPub, byDatePub)
 
-    var [xAxisFocusPriv, yAxisFocusPriv, xAxisContextPriv] = createAxes(xFocusPriv, yFocusPriv, xContextPriv, localization)
-    var [xAxisFocusPub, yAxisFocusPub, xAxisContextPub] = createAxes(xFocusPub, yFocusPub, xContextPub, localization)
+    var [xAxisFocusPriv, yAxisFocusPriv, xAxisContextPriv] = createAxes(xFocusPriv, yFocusPriv, xContextPriv)
+    var [xAxisFocusPub, yAxisFocusPub, xAxisContextPub] = createAxes(xFocusPub, yFocusPub, xContextPub)
 
     var [focusPriv, contextPriv] = createGroups(groupPriv, heightHisto)
     var [focusPub, contextPub] = createGroups(groupPub, heightHisto)
@@ -197,17 +223,17 @@ function initHistos(groupPriv, groupPub, byDatePriv, byDatePub, localization){
     var lineFocusPub = createLine(xFocusPub, yFocusPub)
     var lineContextPub = createLine(xContextPub, yContextPub)
 
-    /*var brushPriv = d3.brushX()
+    var brushPriv = d3.brushX()
         .extent([[0, 0], [widthHisto, heightHistoContext]])
         .on("brush", function () {
-          brushUpdate(brushPriv, focusPriv, lineFocusPriv, xFocusPriv, xContextPriv, xAxisFocusPriv, yAxisFocusPriv);
+          brushUpdate(focusPriv, lineFocusPriv, xFocusPriv, xContextPriv, xAxisFocusPriv, "priv")
     })
 
     var brushPub = d3.brushX()
         .extent([[0, 0], [widthHisto, heightHistoContext]])
         .on("brush", function () {
-          brushUpdate(brushPub, focusPub, lineFocusPub, xFocusPub, xContextPub, xAxisFocusPub, yAxisFocusPub);
-    })*/
+          brushUpdate(focusPub, lineFocusPub, xFocusPub, xContextPub, xAxisFocusPub, "pub")
+    })
 
     var colorPriv = d3.scaleOrdinal(d3.schemeCategory10)
     var colorPub = d3.scaleOrdinal(d3.schemeCategory10)
@@ -216,24 +242,16 @@ function initHistos(groupPriv, groupPub, byDatePriv, byDatePub, localization){
     domainColor(colorPub, byDatePub)
 
     // Axes focus
-    focusPriv.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + heightHisto + ")")
-      .call(xAxisFocusPriv)
+    
+    var heightContext = heightHisto * 0.21
 
-    focusPriv.append("g")
-      .attr("class", "y axis")
-      .call(yAxisFocusPriv)
+    setAxes(focusPriv, heightHisto, xAxisFocusPriv, yAxisFocusPriv, "priv")
+    setAxes(focusPub, heightHisto, xAxisFocusPub, yAxisFocusPub, "pub")
+    setAxes(contextPriv, heightContext, xAxisContextPriv, null, null)
+    setAxes(contextPub, heightContext, xAxisContextPub, null, null)
 
-      // Axes focus
-    focusPub.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + heightHisto + ")")
-        .call(xAxisFocusPub)
-
-    focusPub.append("g")
-        .attr("class", "y axis")
-        .call(yAxisFocusPub)
+    setBrush(contextPriv, brushPriv, heightContext)
+    setBrush(contextPub, brushPub, heightContext)
 
     /***** Création du graphique contexte *****/
     createContextLineChart(contextPriv, byDatePriv, lineContextPriv, colorPriv)
@@ -242,11 +260,6 @@ function initHistos(groupPriv, groupPub, byDatePriv, byDatePub, localization){
 
     createFocusLineChart(groupPriv, byDatePriv, lineFocusPriv, colorPriv)
     createFocusLineChart(groupPub, byDatePub, lineFocusPub, colorPub)
-
-    // Axes contexte
-
-    //linkAxisBrushes(contextPriv, xAxisContextPriv, brushPriv, heightHisto)
-    //linkAxisBrushes(contextPub, xAxisContextPub, brushPub, heightHisto)
     
     /***** Création de la légende *****/
     legend(groupPriv, byDatePriv, colorPriv)
